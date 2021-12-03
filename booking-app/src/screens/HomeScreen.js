@@ -3,12 +3,15 @@ import { Text, StyleSheet, FlatList, View } from "react-native";
 import MovieCard from "../components/MovieCard";
 import { SearchBar, Tab } from "react-native-elements";
 import axios from "axios";
+import { Button } from "react-native-elements/dist/buttons/Button";
+import LoginForm from "../components/LoginForm";
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const [movies, setMovies] = useState(null);
   const [term, setTerm] = useState("");
   const [index, setIndex] = useState(0);
-
+  //const [title, setTitle] = useState();
+ 
   useEffect(async () => {
     if (index == 0) {
       try {
@@ -49,6 +52,8 @@ const HomeScreen = () => {
         </Tab>
       </View>
 
+     
+
       <FlatList
         keyExtractor={(item) => item.movieID}
         columnWrapperStyle={{
@@ -62,6 +67,14 @@ const HomeScreen = () => {
           return <MovieCard movie={item} />;
         }}
       />
+      <Button
+        onPress={() => {
+          navigation.navigate('Movie');
+        }}
+        title="Learn More"
+        color="#841584"
+        accessibilityLabel="Learn more about this purple button"
+    />
     </View>
   );
 };
