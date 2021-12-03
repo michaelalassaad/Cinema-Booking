@@ -4,6 +4,7 @@ import { Button } from "react-native-elements/dist/buttons/Button";
 import { LinearGradient } from "expo-linear-gradient";
 import { Dimensions } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import { color } from "react-native-reanimated";
 
 //Inside navigation, we have the prop id.
 
@@ -42,7 +43,9 @@ const MovieScreen = ({ navigation }) => {
       </View>
       <View style = {styles.description}>
           <Text style= {styles.description}> Description:</Text>
-          <Text style= {styles.values}> i like coconuts to the point where </Text>
+          <Text style= {styles.values}>Dom Cobb is a thief with the rare ability to enter people's dreams and steal their secrets from their subconsciouses.
+           His skill has made him a hot commodity in the world of corporate espionage, but has also cost him everything he loves. Cobb gets a chance at redemption when he is offered a seemingly impossible task: Plant an idea in someone's mind.
+           If he succeeds, it will be the perfect crime, but a dangerous enemy anticipates Cobb's every move. </Text>
           </View>
 
     <View style = {styles.values}>
@@ -61,15 +64,15 @@ const MovieScreen = ({ navigation }) => {
           end: { x: 1, y: 0.5 },
         }}
         
-        onPress={() => {return(<Text style = {styles.values}>This is working</Text>)}}
+        onPress={() => {navigation.navigate('Home');}} //to be changed
       />
 
       <TouchableOpacity
         onPress={() => {
-           navigation.navigate("Review");
+           navigation.navigate('Login');  //To be changed
         }}
           >
-        <Text style={styles.previous}>Old Reviews</Text>
+        <Text style={{color:'blue',marginLeft: 50,marginTop:10}}>Old Reviews</Text>
       </TouchableOpacity>
 
       
@@ -111,7 +114,7 @@ const styles = StyleSheet.create({
   reviews:{
     color: '#cfcfcf',
     fontSize: 15,
-    flexDirection: 'column',
+    flexDirection: 'row',
     marginTop: 15,
     marginLeft:5,
   },
