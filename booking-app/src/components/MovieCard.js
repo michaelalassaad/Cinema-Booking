@@ -1,6 +1,5 @@
 import React from "react";
 import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { Card } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { withNavigation } from "react-navigation";
 

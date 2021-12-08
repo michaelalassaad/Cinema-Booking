@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Text, StyleSheet, FlatList, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, FlatList, View } from "react-native";
 import MovieCard from "../components/MovieCard";
 import { SearchBar, Tab } from "react-native-elements";
 import axios from "axios";
