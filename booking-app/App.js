@@ -29,9 +29,18 @@ HomeScreen.navigationOptions = () => {
       backgroundColor: "#303337",
     },
     headerTitleStyle: {
-      color: "#cfcfcf",
+      color: "#303337",
+    },
+  };
+}; 
+MovieScreen.navigationOptions = () => {
+  return {
+    headerStyle: {
+      backgroundColor: "#303337",
+    },
+    headerTitleStyle: {
+      color: "#303337",
     },
   };
 };
-
 export default createAppContainer(navigator);

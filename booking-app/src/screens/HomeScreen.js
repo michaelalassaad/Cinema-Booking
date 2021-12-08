@@ -12,7 +12,7 @@ const HomeScreen = () => {
   useEffect(async () => {
     if (index == 0) {
       try {
-        const res = await axios.get("http://192.168.16.118:3000/now");
+        const res = await axios.get("http://192.168.0.110:3000/now");
         setMovies(res.data);
         styles.filter1 = { ...styles.filter1, color: "grey" };
         styles.filter2 = { ...styles.filter2, color: "#cfcfcf" };
@@ -21,7 +21,7 @@ const HomeScreen = () => {
       }
     } else {
       try {
-        const res = await axios.get("http://192.168.16.118:3000/all");
+        const res = await axios.get("http://192.168.0.110:3000/all");
         setMovies(res.data);
         styles.filter1 = { ...styles.filter1, color: "#cfcfcf" };
         styles.filter2 = { ...styles.filter2, color: "grey" };
