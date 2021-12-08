@@ -12,24 +12,41 @@ const HomeScreen = () => {
   useEffect(async () => {
     if (index == 0) {
       try {
-        const res = await axios.get("http://192.168.16.118:3000/now");
+        const res = await axios.get("http://192.168.1.70:3000/now");
+        setTerm("");
         setMovies(res.data);
-        styles.filter1 = { ...styles.filter1, color: "grey" };
-        styles.filter2 = { ...styles.filter2, color: "#cfcfcf" };
       } catch (err) {
         console.log(err);
       }
     } else {
       try {
-        const res = await axios.get("http://192.168.16.118:3000/all");
+        const res = await axios.get("http://192.168.1.70:3000/all");
+        setTerm("");
         setMovies(res.data);
-        styles.filter1 = { ...styles.filter1, color: "#cfcfcf" };
-        styles.filter2 = { ...styles.filter2, color: "grey" };
       } catch (err) {
         console.log(err);
       }
     }
   }, [index]);
+
+  const search = async (searchTerm) => {
+    try {
+      const res = await axios.get("http://192.168.1.70:3000/search", {
+        params: {
+          term: searchTerm,
+          filter: index,
+        },
+      });
+
+      setMovies(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const clear = () => {
+    search("");
+  };
 
   return (
     <View style={styles.container}>
@@ -38,14 +55,21 @@ const HomeScreen = () => {
           placeholder="Type Here..."
           value={term}
           onChangeText={(newTerm) => setTerm(newTerm)}
-          onSubmitEditing={() => console.log(term)}
+          onSubmitEditing={() => search(term)}
+          onClear={clear}
           round={true}
           searchIcon={{ size: 25 }}
         />
 
         <Tab value={index} onChange={setIndex}>
-          <Tab.Item title="Now showing" titleStyle={styles.filter1} />
-          <Tab.Item title="All Movies" titleStyle={styles.filter2} />
+          <Tab.Item
+            title="Now showing"
+            titleStyle={index == 0 ? styles.pressed : styles.unpressed}
+          />
+          <Tab.Item
+            title="All Movies"
+            titleStyle={index == 1 ? styles.pressed : styles.unpressed}
+          />
         </Tab>
       </View>
 
@@ -71,13 +95,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#303337",
     flex: 1,
   },
-  filter1: {
-    color: "#cfcfcf",
+
+  unpressed: {
+    color: "grey",
     fontSize: 15,
     fontWeight: "bold",
   },
-  filter2: {
-    color: "grey",
+  pressed: {
+    color: "#cfcfcf",
     fontSize: 15,
     fontWeight: "bold",
   },

@@ -1,4 +1,5 @@
-import React from "react";
+import axios from "axios";
+import React, { useContext, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -8,17 +9,34 @@ import {
 } from "react-native";
 import LoginForm from "../components/LoginForm";
 import SocialMedia from "../components/SocialMedia";
+import AuthContext from "../context/AuthContext";
 
 const LoginScreen = ({ navigation }) => {
+  const { custId, setCustId } = useContext(AuthContext);
+  const [error, setError] = useState("");
+
+  const login = async (email, pass) => {
+    try {
+      const res = await axios.post("http://192.168.1.70:3000/signin", {
+        email: email,
+        pass: pass,
+      });
+      const id = res.data.custId;
+      setCustId(id);
+      navigation.navigate("mainFlow");
+    } catch (err) {
+      setError(err.response.data);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.upper}>
         <LoginForm
           headerText={"Login"}
           buttonText={"Login"}
-          onSubmit={() => {
-            navigation.navigate("mainFlow");
-          }}
+          onSubmit={login}
+          errorMessage={error}
         />
       </View>
 
@@ -52,8 +70,8 @@ const styles = StyleSheet.create({
   },
 
   upper: {
-    flex: 1,
-    marginVertical: "5%",
+    flex: 1.5,
+    paddingVertical: "5%",
   },
 
   lower: {
@@ -70,7 +88,6 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    fontFamily: "Noteworthy",
     color: "#cfcfcf",
   },
 });

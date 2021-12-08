@@ -1,72 +1,179 @@
 import React, { useState } from "react";
-import { View, StyleSheet, SafeAreaView } from "react-native";
+import { View, StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
 import { Text, Input, Button } from "react-native-elements";
-import { Feather } from "react-native-vector-icons";
+import { Feather, FontAwesome, Ionicons } from "react-native-vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 
-const LoginForm = ({ headerText, buttonText, onSubmit }) => {
+const LoginForm = ({
+  headerText,
+  buttonText,
+  onSubmit,
+  errorMessage,
+  compact,
+}) => {
   const [mail, setMail] = useState("");
   const [pass, setPass] = useState("");
-  return (
-    <View style={styles.login}>
-      <Text h3 style={styles.text}>
-        {headerText}
-      </Text>
-      <View style={{ alignSelf: "stretch" }}>
+  const [fname, setFname] = useState("");
+  const [lname, setLname] = useState("");
+  const [phone, setPhone] = useState("");
+
+  const info = (
+    <View style={styles.infoContainer}>
+      <View style={styles.nameContainer}>
         <Input
-          label={"Email"}
-          labelStyle={{ fontFamily: "Noteworthy" }}
-          containerStyle={styles.input}
-          placeholder={"john@email.com"}
-          onChangeText={(t) => setMail(t)}
-          value={mail}
+          label={"First Name"}
+          placeholder={"John"}
+          onChangeText={(t) => setFname(t)}
+          value={fname}
           fontSize={17}
-          leftIcon={<Feather name={"mail"} size={20} style={styles.icon} />}
+          leftIcon={<Ionicons name={"person"} size={20} style={styles.text} />}
           leftIconContainerStyle={{ marginHorizontal: 15 }}
           autoCorrect={false}
-          autoCapitalize={"none"}
+          inputStyle={styles.text}
+          containerStyle={{ flex: 1 }}
         />
 
         <Input
-          label={"Password"}
-          labelStyle={{ fontFamily: "Noteworthy" }}
-          containerStyle={styles.input}
-          placeholder={"Password"}
-          value={pass}
-          onChangeText={(t) => setPass(t)}
+          label={"Last Name"}
+          placeholder={"Doe"}
+          onChangeText={(t) => setLname(t)}
+          value={lname}
           fontSize={17}
-          leftIcon={<Feather name={"lock"} size={20} style={styles.icon} />}
+          leftIcon={<Ionicons name={"person"} size={20} style={styles.text} />}
           leftIconContainerStyle={{ marginHorizontal: 15 }}
-          blur={true}
           autoCorrect={false}
-          autoCapitalize={"none"}
-          secureTextEntry={true}
+          inputStyle={styles.text}
+          containerStyle={{ flex: 1 }}
         />
       </View>
 
-      <Button
-        title={buttonText}
-        titleStyle={{ fontFamily: "Noteworthy" }}
-        buttonStyle={styles.button}
-        ViewComponent={LinearGradient}
-        linearGradientProps={{
-          colors: ["#42f5ef", "#429cf5"],
-          start: { x: 0, y: 0.5 },
-          end: { x: 1, y: 0.5 },
-        }}
-        onPress={onSubmit}
+      <Input
+        label={"Phone Number"}
+        placeholder={"12345678"}
+        onChangeText={(t) => setPhone(t)}
+        value={phone}
+        fontSize={17}
+        leftIcon={<FontAwesome name={"phone"} size={20} style={styles.text} />}
+        leftIconContainerStyle={{ marginHorizontal: 15 }}
+        autoCorrect={false}
+        inputStyle={styles.text}
+        containerStyle={{ flex: 1 }}
       />
     </View>
   );
+
+  return (
+    <KeyboardAvoidingView
+      contentContainerStyle={{ flex: 1 }}
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "position" : "height"}
+      keyboardVerticalOffset={-100} ///THIS MIGHT HAVE TO BE CHANGED BASED ON SCREEN HEIGHT AND HEIGHT OF SINGUP
+    >
+      <View style={styles.login}>
+        <View style={styles.headerContainer}>
+          <Text h3 style={styles.text}>
+            {headerText}
+          </Text>
+        </View>
+
+        <View style={styles.formContainer}>
+          {!compact ? info : null}
+          <View style={styles.mailContainer}>
+            <Input
+              label={"Email"}
+              placeholder={"john@email.com"}
+              onChangeText={(t) => setMail(t)}
+              value={mail}
+              fontSize={17}
+              leftIcon={<Feather name={"mail"} size={20} style={styles.text} />}
+              leftIconContainerStyle={{ marginHorizontal: 15 }}
+              autoCorrect={false}
+              autoCapitalize={"none"}
+              inputStyle={styles.text}
+            />
+
+            <Input
+              label={"Password"}
+              placeholder={"Password"}
+              value={pass}
+              onChangeText={(t) => setPass(t)}
+              fontSize={17}
+              leftIcon={<Feather name={"lock"} size={20} style={styles.text} />}
+              leftIconContainerStyle={{ marginHorizontal: 15 }}
+              blur={true}
+              autoCorrect={false}
+              autoCapitalize={"none"}
+              secureTextEntry={true}
+              inputStyle={styles.text}
+            />
+          </View>
+        </View>
+
+        <View style={styles.buttonContainer}>
+          <Button
+            title={buttonText}
+            buttonStyle={styles.button}
+            ViewComponent={LinearGradient}
+            linearGradientProps={{
+              colors: ["#42f5ef", "#429cf5"],
+              start: { x: 0, y: 0.5 },
+              end: { x: 1, y: 0.5 },
+            }}
+            onPress={() =>
+              compact
+                ? onSubmit(mail, pass)
+                : onSubmit(mail, pass, fname, lname, phone)
+            }
+          />
+          <View>
+            {errorMessage ? (
+              <Text style={styles.errorText}>{errorMessage}</Text>
+            ) : null}
+          </View>
+        </View>
+      </View>
+    </KeyboardAvoidingView>
+  );
+};
+
+LoginForm.defaultProps = {
+  compact: true,
 };
 
 const styles = StyleSheet.create({
   login: {
     alignItems: "center",
-    justifyContent: "space-evenly",
-    borderColor: "red",
     paddingHorizontal: "5%",
     flex: 1,
+  },
+
+  headerContainer: {
+    flex: 0.2,
+    justifyContent: "center",
+  },
+
+  formContainer: {
+    alignSelf: "stretch",
+    justifyContent: "flex-start",
+    flex: 0.5,
+  },
+
+  infoContainer: {
+    flex: 0.5,
+    marginBottom: "5%",
+  },
+  nameContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  mailContainer: {
+    flex: 0.5,
+  },
+
+  buttonContainer: {
+    flex: 0.2,
+    justifyContent: "center",
   },
 
   button: {
@@ -75,12 +182,13 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
   },
   text: {
-    fontFamily: "Noteworthy",
-    marginVertical: 10,
     color: "#cfcfcf",
   },
-  icon: {
-    color: "#cfcfcf",
+
+  errorText: {
+    color: "#fc0303",
+    marginTop: 10,
+    alignSelf: "center",
   },
 });
 

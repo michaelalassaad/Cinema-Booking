@@ -1,9 +1,11 @@
+import React from "react";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import LoginScreen from "./src/screens/LoginScreen";
 import HomeScreen from "./src/screens/HomeScreen";
 import SignupScreen from "./src/screens/SignupScreen";
 import MovieScreen from "./src/screens/MovieScreen";
+import { AuthProvider } from "./src/context/AuthContext";
 
 const navigator = createSwitchNavigator(
   {
@@ -19,7 +21,6 @@ const navigator = createSwitchNavigator(
   },
   {
     initialRouteName: "loginFlow",
-    defaultNavigationOptions: { title: "Main" },
   }
 );
 
@@ -34,4 +35,12 @@ HomeScreen.navigationOptions = () => {
   };
 };
 
-export default createAppContainer(navigator);
+const App = createAppContainer(navigator);
+
+export default () => {
+  return (
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  );
+};

@@ -30,9 +30,21 @@ router.get("/now", (req, res) => {
   );
 });
 
-router.get("/movie", (req, res) => {
-  const id = req.params.id;
-  db.query("SELECT * FROM MOVIE WHERE movieID = (?)", id);
+router.get("/search", (req, res) => {
+  console.log(req);
+  const term = req.query.term;
+  const filter = req.query.filter;
+  var query;
+  if (filter == 0) {
+    query = `SELECT movieID, rating, poster, title FROM MOVIE WHERE releaseDate >= '2021-07-01' AND title LIKE "%${term}%" ORDER BY title`;
+  } else {
+    query = `SELECT movieID, rating, poster, title FROM MOVIE WHERE title LIKE "%${term}%" ORDER BY title`;
+  }
+
+  db.query(query, (err, result) => {
+    if (err) throw err;
+    res.send(result);
+  });
 });
 
 module.exports = router;
