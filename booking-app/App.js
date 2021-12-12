@@ -5,6 +5,7 @@ import LoginScreen from "./src/screens/LoginScreen";
 import HomeScreen from "./src/screens/HomeScreen";
 import SignupScreen from "./src/screens/SignupScreen";
 import MovieScreen from "./src/screens/MovieScreen";
+import MovieReview from "./src/screens/MovieReview";
 import { AuthProvider } from "./src/context/AuthContext";
 
 const navigator = createSwitchNavigator(
@@ -17,6 +18,7 @@ const navigator = createSwitchNavigator(
     mainFlow: createStackNavigator({
       Home: HomeScreen,
       Movie: MovieScreen,
+      Review: MovieReview,
     }),
   },
   {
@@ -30,7 +32,7 @@ HomeScreen.navigationOptions = () => {
       backgroundColor: "#303337",
     },
     headerTitleStyle: {
-      color: "#303337",
+      color: "#cfcfcf",
     },
   };
 };
@@ -40,7 +42,7 @@ MovieScreen.navigationOptions = () => {
       backgroundColor: "#303337",
     },
     headerTitleStyle: {
-      color: "#303337",
+      color: "#cfcfcf",
     },
   };
 };

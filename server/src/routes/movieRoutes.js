@@ -9,7 +9,7 @@ app.use(cors());
 const db = mysql.createPool({
   host: "localhost",
   user: "root",
-  password: "4737",
+  password: "root",
   database: "cinemaBooking",
 });
 
@@ -97,4 +97,5 @@ router.get("/review", (req, res) => {
   );
 });
 
+router.post("/add_review", (req, res) => {});
 module.exports = router;

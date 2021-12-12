@@ -1,21 +1,21 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   StyleSheet,
   Text,
   Image,
   View,
   TouchableOpacity,
-  ListViewComponent,
   Modal,
 } from "react-native";
-import { Button } from "react-native-elements/dist/buttons/Button";
+import { Button, Divider } from "react-native-elements";
 import { LinearGradient } from "expo-linear-gradient";
-import { ScrollView } from "react-native-gesture-handler";
-import { FlatList } from "react-native-gesture-handler";
+import { ScrollView, FlatList } from "react-native";
+import { FontAwesome5 } from "react-native-vector-icons";
 import Icon from "react-native-vector-icons/FontAwesome";
 import ReviewCard from "../components/ReviewCard";
 import axios from "axios";
 import AuthContext from "../context/AuthContext";
+
 //Inside navigation, we have the prop id.
 
 const MovieScreen = ({ navigation }) => {
@@ -34,7 +34,7 @@ const MovieScreen = ({ navigation }) => {
     return actor.map(function (actor, i) {
       return (
         <View key={i}>
-          <Text style={styles.values}>
+          <Text style={styles.text}>
             {actor.firstName} {actor.lastName}{" "}
           </Text>
         </View>
@@ -45,7 +45,7 @@ const MovieScreen = ({ navigation }) => {
     return direc.map(function (direc, i) {
       return (
         <View key={i}>
-          <Text style={styles.values}>
+          <Text style={styles.text}>
             {direc.firstName} {direc.lastName}{" "}
           </Text>
         </View>
@@ -55,6 +55,7 @@ const MovieScreen = ({ navigation }) => {
 
   useEffect(async () => {
     const id = getID();
+    console.log(id);
     try {
       const res = await axios.get("http://192.168.1.70:3000/movie/", {
         params: { movID: id },
@@ -72,12 +73,10 @@ const MovieScreen = ({ navigation }) => {
         params: { movID: id },
       });
       setReview(res3.data);
-      styles.filter1 = { ...styles.filter1, color: "#cfcfcf" };
-      styles.filter2 = { ...styles.filter2, color: "grey" };
     } catch (err) {
       console.log(err);
     }
-  }, [0]);
+  }, []);
 
   if (!movie || !actor || !direc || !review) return null;
 
@@ -86,22 +85,7 @@ const MovieScreen = ({ navigation }) => {
       <View>
         <Text style={styles.title}>{movie.title}</Text>
       </View>
-
-      <Modal visible={showM} transparent onRequestClose={() => setShowM(false)}>
-        <TouchableOpacity onPress={() => setShowM(false)} style={styles.mod}>
-          <Image
-            source={{ uri: movie.poster }}
-            style={{
-              width: "85%",
-              height: "75%",
-              borderColor: "#1E1F21",
-              borderWidth: 7,
-            }}
-          />
-        </TouchableOpacity>
-      </Modal>
-
-      <View style={styles.container2}>
+      <View style={styles.upperContainer}>
         <TouchableOpacity onPress={() => setShowM(true)}>
           <Image
             source={{ uri: movie.poster }}
@@ -117,26 +101,29 @@ const MovieScreen = ({ navigation }) => {
           />
         </TouchableOpacity>
 
-        <Text style={styles.values}>{movie.descr}</Text>
+        <Text style={styles.text}>{movie.descr}</Text>
       </View>
 
-      <View style={styles.container3}>
-        <Text style={styles.description}> Cast</Text>
+      <View style={styles.crewContainer}>
+        <Text style={styles.description}>Cast</Text>
+        <ScrollView style={styles.crewListContainer}>
+          <Text style={styles.text}>{actors()}</Text>
+        </ScrollView>
       </View>
-      <ScrollView style={styles.container2a}>
-        <Text style={styles.values}>{actors()}</Text>
-      </ScrollView>
 
-      <View style={styles.container3}>
-        <Text style={styles.description}> Director</Text>
+      <Divider orientation="horizontal" style={styles.divider} />
+
+      <View style={styles.crewContainer}>
+        <Text style={styles.description}>Director</Text>
+        <ScrollView style={styles.crewListContainer}>
+          <Text style={styles.text}>{directors()}</Text>
+        </ScrollView>
       </View>
-      <ScrollView style={styles.container2a}>
-        <Text style={styles.values}>{directors()}</Text>
-      </ScrollView>
+
+      <Divider orientation="horizontal" style={styles.divider} />
 
       <Button
         title={"Book Now"}
-        titleStyle={{ fontFamily: "Noteworthy" }}
         buttonStyle={styles.button}
         ViewComponent={LinearGradient}
         linearGradientProps={{
@@ -158,9 +145,9 @@ const MovieScreen = ({ navigation }) => {
             style={{ marginTop: 1, marginRight: 3 }}
           />
           <Text style={styles.description}> Rating </Text>
-          <Text style={styles.values}>{movie.rating} / 10</Text>
+          <Text style={styles.text}>{movie.rating} / 10</Text>
         </View>
-        <View style={{ marginHorizontal: "15%" }}></View>
+
         <View style={styles.container5}>
           <Icon
             name="clock-o"
@@ -169,35 +156,53 @@ const MovieScreen = ({ navigation }) => {
             style={{ marginTop: 1, marginRight: 3 }}
           />
           <Text style={styles.description}> Runtime </Text>
-          <Text style={styles.values}>{movie.movieLength} mins</Text>
+          <Text style={styles.text}>{movie.movieLength} mins</Text>
         </View>
       </View>
 
-      <View>
-        <FlatList
-          horizontal={true}
-          keyExtractor={(item) => item.review.movRevID}
-          data={review}
-          renderItem={({ item }) => {
-            return <ReviewCard rev={item} />;
+      <View style={styles.reviewsContainer}>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            paddingTop: 10,
+            paddingHorizontal: 20,
+            flex: 1,
           }}
-        />
-      </View>
+        >
+          <Text style={styles.description}>Reviews</Text>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Review", { movieId: getID() });
+            }}
+          >
+            <FontAwesome5
+              size={20}
+              name={"plus"}
+              style={{
+                color: "#cfcfcf",
+              }}
+            />
+          </TouchableOpacity>
+        </View>
 
-      <Button
-        title={"Add Review"}
-        titleStyle={{ fontFamily: "Noteworthy" }}
-        buttonStyle={styles.button2}
-        ViewComponent={LinearGradient}
-        linearGradientProps={{
-          colors: ["#42f5ef", "#429cf5"],
-          start: { x: 0, y: 0.5 },
-          end: { x: 1, y: 0.5 },
-        }}
-        onPress={() => {
-          navigation.navigate("Login");
-        }} //to be changed
-      />
+        <View style={{ justifyContent: "center", flex: 10 }}>
+          {review.length == 0 ? (
+            <Text style={{ color: "#cfcfcf", alignSelf: "center" }}>
+              No reviews yet. Be the first to add one!
+            </Text>
+          ) : (
+            <FlatList
+              horizontal={true}
+              keyExtractor={(item) => item.review.movRevID}
+              data={review}
+              renderItem={({ item }) => {
+                return <ReviewCard rev={item} />;
+              }}
+            />
+          )}
+        </View>
+      </View>
     </ScrollView>
   );
 };
@@ -208,134 +213,73 @@ const styles = StyleSheet.create({
     fontSize: 35,
     flex: 1,
     alignSelf: "center",
-    justifyContent: "center",
-    alignItems: "center",
-    textAlignVertical: "center",
-    alignContent: "center",
-    textAlign: "center",
     marginTop: 20,
     marginBottom: 5,
   },
   container: {
     backgroundColor: "#303337",
+    paddingHorizontal: 10,
   },
-  container2: {
-    marginHorizontal: 15,
+  upperContainer: {
     marginBottom: 5,
-    borderColor: "#1E1F21",
-    borderWidth: 3,
     backgroundColor: "#1E1F21",
     borderRadius: 10,
     flexDirection: "row",
   },
-  container2a: {
-    marginHorizontal: 15,
-    marginBottom: 5,
+  crewListContainer: {
     flexDirection: "row",
+    marginTop: 5,
   },
-  container3: {
-    margin: 5,
+  crewContainer: {
+    marginTop: 5,
     flexDirection: "column",
   },
   container4: {
-    marginHorizontal: 15,
-    marginTop: 5,
-    marginBottom: 5,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: "space-around",
     flexDirection: "row",
-    borderColor: "#1E1F21",
-    borderWidth: 3,
+    paddingVertical: 10,
     backgroundColor: "#1E1F21",
     borderRadius: 10,
   },
   container5: {
-    marginHorizontal: 15,
-    marginTop: 5,
-    marginBottom: 5,
-    justifyContent: "center",
     alignItems: "center",
-    flexDirection: "column",
   },
   content: {
     flexDirection: "row",
     alignSelf: "flex-start",
   },
-  filter1: {
+
+  reviewsContainer: {
+    backgroundColor: "#1E1F21",
+    borderRadius: 10,
+    marginVertical: 15,
+    height: 220,
+  },
+
+  text: {
     color: "#cfcfcf",
     fontSize: 15,
-    fontWeight: "bold",
-  },
-  filter2: {
-    color: "grey",
-    fontSize: 15,
-    fontWeight: "bold",
-  },
-  values: {
-    color: "#cfcfcf",
-    fontSize: 15,
-    flex: 1,
-    flexDirection: "row",
     alignSelf: "center",
-    justifyContent: "center",
-    alignItems: "center",
-    textAlignVertical: "center",
-    alignContent: "center",
-    textAlignVertical: "center",
+    flex: 1,
     marginHorizontal: 10,
   },
   description: {
     color: "#cfcfcf",
     fontSize: 15,
-    fontSize: 15,
-    flex: 1,
-    flexDirection: "row",
-    textAlign: "justify",
     fontWeight: "bold",
-    marginTop: 5,
-    marginBottom: 2,
-  },
-
-  reviews: {
-    color: "#cfcfcf",
-    fontSize: 15,
-    alignSelf: "center",
-    justifyContent: "center",
-    alignItems: "center",
-    textAlignVertical: "center",
-    alignContent: "center",
   },
 
   button: {
     borderRadius: 30,
     width: "90%",
-    marginVertical: 25,
+    marginVertical: 15,
     alignSelf: "center",
-    justifyContent: "center",
-    alignItems: "center",
-    textAlignVertical: "center",
-    alignContent: "center",
-  },
-  button2: {
-    borderRadius: 30,
-    marginBottom: 25,
-    width: "90%",
-    alignSelf: "center",
-    justifyContent: "center",
-    alignItems: "center",
-    textAlignVertical: "center",
-    alignContent: "center",
   },
 
-  previous: {
-    color: "blue",
-  },
-
-  mod: {
-    backgroundColor: "#00000099",
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+  divider: {
+    marginHorizontal: 5,
+    marginVertical: 5,
+    borderWidth: 0.1,
   },
 });
 
