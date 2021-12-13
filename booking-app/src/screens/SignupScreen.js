@@ -1,10 +1,8 @@
 import axios from "axios";
 import React, { useContext, useState } from "react";
 import {
-  View,
-  KeyboardAvoidingView,
-  StyleSheet,
-  KeyboardAvoidingViewBase,
+  View, 
+  StyleSheet,  
 } from "react-native";
 import LoginForm from "../components/LoginForm";
 
@@ -16,7 +14,7 @@ const SignupScreen = ({ navigation }) => {
 
   const signup = async (email, pass, fname, lname, phone) => {
     try {
-      const res = await axios.post("http://192.168.1.70:3000/signup", {
+      const res = await axios.post("http://192.168.0.103:3000/signup", {
         fname: fname,
         lname: lname,
         phone: phone,
@@ -32,14 +30,14 @@ const SignupScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <LoginForm
-        headerText={"Sign up"}
-        buttonText={"Sign up"}
-        errorMessage={error}
-        onSubmit={signup}
-        compact={false}
-      />
+    <View style={styles.container}> 
+        <LoginForm
+          headerText={"Sign up"}
+          buttonText={"Sign up"}
+          errorMessage={error}
+          onSubmit={signup}
+          compact={false}
+        /> 
     </View>
   );
 };

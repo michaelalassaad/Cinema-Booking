@@ -9,7 +9,7 @@ app.use(cors());
 const db = mysql.createPool({
   host: "localhost",
   user: "root",
-  password: "root",
+  password: "4737",
   database: "cinemaBooking",
 });
 
@@ -34,7 +34,6 @@ router.get("/now", (req, res) => {
 });
 
 router.get("/search", (req, res) => {
-  console.log(req);
   const term = req.query.term;
   const filter = req.query.filter;
   var query;
@@ -62,8 +61,8 @@ router.get("/act", (req, res) => {
   const id = req.query.movID;
   db.query(
     "SELECT A.firstName,lastName FROM ACTOR A, MOVIE M, ACTS_IN I WHERE A.actorID = I.actorID AND I.movieID = M.movieID AND M.movieID = '" +
-      id +
-      "'",
+    id +
+    "'",
     (err, result) => {
       if (err) throw err;
       res.send(result);
@@ -75,8 +74,8 @@ router.get("/dir", (req, res) => {
   const id = req.query.movID;
   db.query(
     "SELECT D.firstName,lastName FROM DIRECTOR D, MOVIE M, DIRECTS I WHERE D.directorID = I.directorID AND I.movieID = M.movieID AND M.movieID = '" +
-      id +
-      "'",
+    id +
+    "'",
     (err, result) => {
       if (err) throw err;
       res.send(result);
@@ -88,8 +87,8 @@ router.get("/review", (req, res) => {
   const id = req.query.movID;
   db.query(
     "SELECT R.rating, review FROM MOVIE_REVIEW R, GIVES_MOV_REVIEW G, MOVIE M WHERE R.movRevID = G.movRevID AND G.movieID = M.movieID AND M.movieID ='" +
-      id +
-      "'",
+    id +
+    "'",
     (err, result) => {
       if (err) throw err;
       res.send(result);
@@ -97,5 +96,26 @@ router.get("/review", (req, res) => {
   );
 });
 
-router.post("/add_review", (req, res) => {});
+router.post("/add_review", (req, res) => {
+  const mID = req.body.mID;
+  const cID = req.body.cID;
+  const rating = req.body.rating;
+  const review = req.body.review;
+  var id;
+  db.query("SELECT MAX(movRevID) AS max FROM MOVIE_REVIEW", (err, result) => { 
+      id = "A" + (parseInt(result[0].max.slice(1)) + 1).toString(); 
+
+    db.query(
+      `INSERT INTO MOVIE_REVIEW VALUES ("${id}", ${rating}, "${review}")`,
+      (err))
+    db.query(
+      `INSERT INTO GIVES_MOV_REVIEW VALUES ("${cID}", "${mID}", "${id}")`,
+      (err) => {
+        if (err) {
+          return res.status(422).send(err);
+        }
+      }
+    )
+  });
+});
 module.exports = router;

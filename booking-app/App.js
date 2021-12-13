@@ -46,6 +46,16 @@ MovieScreen.navigationOptions = () => {
     },
   };
 };
+MovieReview.navigationOptions = () => {
+  return {
+    headerStyle: {
+      backgroundColor: "#303337",
+    },
+    headerTitleStyle: {
+      color: "#cfcfcf",
+    },
+  };
+};
 
 const App = createAppContainer(navigator);
 
