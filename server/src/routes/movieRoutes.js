@@ -100,19 +100,20 @@ router.post("/add_review", (req, res) => {
   const mID = req.body.mID;
   const cID = req.body.cID;
   const rating = req.body.rating;
-  const review = req.body.review;
+  const review = req.body.review+ " ";
   var id;
-  db.query("SELECT MAX(movRevID) AS max FROM MOVIE_REVIEW", (err, result) => { 
+  db.query("SELECT MAX(movRevID) AS max FROM MOVIE_REVIEW", (err1, result) => { 
       id = "A" + (parseInt(result[0].max.slice(1)) + 1).toString(); 
 
     db.query(
       `INSERT INTO MOVIE_REVIEW VALUES ("${id}", ${rating}, "${review}")`,
-      (err))
+      (err2)=>{ 
+      })
     db.query(
       `INSERT INTO GIVES_MOV_REVIEW VALUES ("${cID}", "${mID}", "${id}")`,
-      (err) => {
-        if (err) {
-          return res.status(422).send(err);
+      (err3) => {
+        if (err3) {
+          return res.status(422).send(err3);
         }
       }
     )

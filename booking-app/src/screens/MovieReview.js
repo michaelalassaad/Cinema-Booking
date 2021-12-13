@@ -78,7 +78,7 @@ const MovieReview = ({ navigation }) => {
                         </View>
                         <View style={{ flexDirection: "row" }}>
                             <Text style={styles.description}>Insert Comments: </Text>
-                            <Text style={styles.hints}>   (250 characters max)</Text>
+                            <Text style={styles.hints}>   (150 characters max)</Text>
                         </View>
                         <TextInput
                             editable
@@ -109,7 +109,7 @@ const MovieReview = ({ navigation }) => {
 
                             onPress={() => {
                                 addRev()
-                                navigation.navigate("Home");
+                                navigation.navigate("Movie", {movieID: id});
                             }}
                         />
                     </View>
