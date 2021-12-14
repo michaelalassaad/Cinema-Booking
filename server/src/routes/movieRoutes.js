@@ -34,7 +34,6 @@ router.get("/now", (req, res) => {
 });
 
 router.get("/search", (req, res) => {
-  console.log(req);
   const term = req.query.term;
   const filter = req.query.filter;
   var query;
@@ -97,5 +96,27 @@ router.get("/review", (req, res) => {
   );
 });
 
-router.post("/add_review", (req, res) => {});
+router.post("/add_review", (req, res) => {
+  const mID = req.body.mID;
+  const cID = req.body.cID;
+  const rating = req.body.rating;
+  const review = req.body.review + " ";
+  var id;
+  db.query("SELECT MAX(movRevID) AS max FROM MOVIE_REVIEW", (err1, result) => {
+    id = "A" + (parseInt(result[0].max.slice(1)) + 1).toString();
+
+    db.query(
+      `INSERT INTO MOVIE_REVIEW VALUES ("${id}", ${rating}, "${review}")`,
+      (err2) => {}
+    );
+    db.query(
+      `INSERT INTO GIVES_MOV_REVIEW VALUES ("${cID}", "${mID}", "${id}")`,
+      (err3) => {
+        if (err3) {
+          return res.status(422).send(err3);
+        }
+      }
+    );
+  });
+});
 module.exports = router;

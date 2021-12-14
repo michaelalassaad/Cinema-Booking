@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { useContext, useState } from "react";
-import { Dimensions } from "react-native";
 import { View, StyleSheet } from "react-native";
 import LoginForm from "../components/LoginForm";
 

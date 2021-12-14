@@ -25,6 +25,7 @@ const MovieScreen = ({ navigation }) => {
   const [direc, setDirec] = useState([]);
   const [review, setReview] = useState([]);
   const [showM, setShowM] = useState(false);
+  const [disen, setDis] = useState(false);
 
   const getID = () => {
     return navigation.getParam("id");
@@ -55,7 +56,6 @@ const MovieScreen = ({ navigation }) => {
 
   useEffect(async () => {
     const id = getID();
-    console.log(id);
     try {
       const res = await axios.get("http://192.168.1.70:3000/movie/", {
         params: { movID: id },
@@ -73,6 +73,14 @@ const MovieScreen = ({ navigation }) => {
         params: { movID: id },
       });
       setReview(res3.data);
+
+      if (
+        parseInt(res.data.releaseDate.substring(0, 4)) < 2021 ||
+        (parseInt(res.data.releaseDate.substring(0, 4)) == 2021 &&
+          parseInt(res.data.releaseDate.substring(5, 7)) < 7)
+      ) {
+        setDis(true);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -85,7 +93,26 @@ const MovieScreen = ({ navigation }) => {
       <View>
         <Text style={styles.title}>{movie.title}</Text>
       </View>
+
       <View style={styles.upperContainer}>
+        <Modal
+          visible={showM}
+          transparent
+          onRequestClose={() => setShowM(false)}
+        >
+          <TouchableOpacity onPress={() => setShowM(false)} style={styles.mod}>
+            <Image
+              source={{ uri: movie.poster }}
+              style={{
+                width: "85%",
+                height: "60%",
+                borderColor: "#1E1F21",
+                borderWidth: 7,
+              }}
+            />
+          </TouchableOpacity>
+        </Modal>
+
         <TouchableOpacity onPress={() => setShowM(true)}>
           <Image
             source={{ uri: movie.poster }}
@@ -124,6 +151,7 @@ const MovieScreen = ({ navigation }) => {
 
       <Button
         title={"Book Now"}
+        disabled={disen}
         buttonStyle={styles.button}
         ViewComponent={LinearGradient}
         linearGradientProps={{
@@ -248,14 +276,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignSelf: "flex-start",
   },
-
+  mod: {
+    backgroundColor: "#00000099",
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   reviewsContainer: {
     backgroundColor: "#1E1F21",
     borderRadius: 10,
     marginVertical: 15,
     height: 220,
   },
-
   text: {
     color: "#cfcfcf",
     fontSize: 15,

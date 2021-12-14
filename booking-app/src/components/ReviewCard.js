@@ -1,6 +1,6 @@
 import React from "react";
-import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { withNavigation } from "react-navigation";
+import { View, Image, Text, StyleSheet, TouchableOpacity} from "react-native";
+import { withNavigation } from "react-navigation"; 
 
 /*
 movie: { movieID: ..., poster: ..., title: ..., rating: ...}
@@ -24,13 +24,13 @@ const ReviewCard = ({ rev, navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 30,
+    marginTop: 20,
     width: 250,
-    height: 150,
-    backgroundColor: "#cfcfcf",
+    height: 160,
+    backgroundColor: '#cfcfcf',
     borderColor: "#1E1F21",
     borderRadius: 10,
-    borderWidth: 5,
+    borderWidth: 5
   },
   review: {
     fontWeight: "500",
@@ -48,18 +48,19 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     flex: 2,
-    backgroundColor: "#1E1F21",
+    backgroundColor: "#303337",
     justifyContent: "space-evenly",
-    width: "100%",
+    width: '100%',
     maxHeight: 50,
     paddingVertical: 5,
-    alignSelf: "center",
-    justifyContent: "center",
-    alignItems: "center",
-    textAlignVertical: "center",
-    alignContent: "center",
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlignVertical: 'center',
+    alignContent: 'center',
+    marginBottom: 5,
     borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
+    borderBottomRightRadius: 10, 
     paddingHorizontal: 5,
   },
 });
