@@ -76,7 +76,7 @@ const LoginForm = ({
       contentContainerStyle={{ flex: 1 }}
       style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "position" : "height"}
-      keyboardVerticalOffset={heightOffset} ///THIS MIGHT HAVE TO BE CHANGED BASED ON SCREEN HEIGHT AND HEIGHT OF SINGUP
+      keyboardVerticalOffset={heightOffset}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.login}>

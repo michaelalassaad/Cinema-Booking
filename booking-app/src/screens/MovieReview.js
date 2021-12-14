@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   StyleSheet,
   KeyboardAvoidingView,
@@ -10,10 +10,10 @@ import {
   TouchableWithoutFeedback,
   Platform,
   SafeAreaView,
+  Dimensions,
 } from "react-native";
-import { Button } from "react-native-elements/dist/buttons/Button";
+import { Button, AirbnbRating } from "react-native-elements";
 import { LinearGradient } from "expo-linear-gradient";
-import { AirbnbRating, Rating } from "react-native-elements";
 import axios from "axios";
 import AuthContext from "../context/AuthContext";
 //Inside navigation, we have the prop id.
@@ -24,6 +24,7 @@ const MovieReview = ({ navigation }) => {
   const { custId } = useContext(AuthContext);
   const id = navigation.getParam("movieId");
   const [ratings, setRating] = useState(5);
+  const heightOffset = 0.1 * Dimensions.get("window").height;
 
   useEffect(async () => {
     try {
@@ -58,20 +59,27 @@ const MovieReview = ({ navigation }) => {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : null}
+      contentContainerStyle={{ flex: 1 }}
       style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "position" : "height"}
+      keyboardVerticalOffset={heightOffset}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <SafeAreaView style={styles.container}>
-          <Text style={styles.title}>{movie.title}</Text>
-          <View style={styles.smovie}>
-            <Image source={{ uri: movie.poster }} style={styles.image} />
+          <View style={{ flex: 3 }}>
+            <View style={{ flex: 0.5 }}>
+              <Text style={styles.title}>{movie.title}</Text>
+            </View>
+            <View style={styles.smovie}>
+              <Image source={{ uri: movie.poster }} style={styles.image} />
+            </View>
           </View>
           <View
             style={{
               backgroundColor: "#1E1F21",
               borderRadius: 30,
               marginTop: 5,
+              flex: 2,
             }}
           >
             <View>
@@ -90,7 +98,6 @@ const MovieReview = ({ navigation }) => {
                   "Rating: 10/10",
                 ]}
                 defaultRating={5}
-                showRating
                 onFinishRating={ratingCompleted}
                 size={20}
               />
@@ -142,25 +149,21 @@ const styles = StyleSheet.create({
   smovie: {
     backgroundColor: "#303337",
     flex: 3,
-    justifyContent: "center",
     alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "stretch",
   },
   title: {
     color: "#cfcfcf",
     fontSize: 35,
     flex: 1,
     alignSelf: "center",
-    justifyContent: "center",
-    alignItems: "center",
-    textAlignVertical: "center",
-    alignContent: "center",
-    textAlign: "center",
     marginTop: 15,
   },
   image: {
-    flex: 1,
+    flex: 0.9,
     justifyContent: "center",
-    width: 180,
+    width: 210,
     borderWidth: 4,
     borderColor: "#1E1F21",
     borderRadius: 10,
