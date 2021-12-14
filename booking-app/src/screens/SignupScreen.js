@@ -1,11 +1,7 @@
 import axios from "axios";
 import React, { useContext, useState } from "react";
-import {
-  View,
-  KeyboardAvoidingView,
-  StyleSheet,
-  KeyboardAvoidingViewBase,
-} from "react-native";
+import { Dimensions } from "react-native";
+import { View, StyleSheet } from "react-native";
 import LoginForm from "../components/LoginForm";
 
 import AuthContext from "../context/AuthContext";

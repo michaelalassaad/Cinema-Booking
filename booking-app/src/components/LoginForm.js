@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { View, StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
+import {
+  View,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+  Dimensions,
+} from "react-native";
 import { Text, Input, Button } from "react-native-elements";
 import { Feather, FontAwesome, Ionicons } from "react-native-vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -16,6 +22,7 @@ const LoginForm = ({
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
   const [phone, setPhone] = useState("");
+  const height = Dimensions.get("window").height;
 
   const info = (
     <View style={styles.infoContainer}>
@@ -67,7 +74,7 @@ const LoginForm = ({
       contentContainerStyle={{ flex: 1 }}
       style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "position" : "height"}
-      keyboardVerticalOffset={-100} ///THIS MIGHT HAVE TO BE CHANGED BASED ON SCREEN HEIGHT AND HEIGHT OF SINGUP
+      keyboardVerticalOffset={-0.25 * height}
     >
       <View style={styles.login}>
         <View style={styles.headerContainer}>
