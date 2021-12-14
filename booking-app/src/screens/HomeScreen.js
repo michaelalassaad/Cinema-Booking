@@ -94,8 +94,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#303337",
     flex: 1,
-  },
-
+  }, 
   unpressed: {
     color: "grey",
     fontSize: 15,

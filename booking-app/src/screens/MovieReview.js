@@ -108,7 +108,7 @@ const MovieReview = ({ navigation }) => {
             </View>
             <TextInput
               editable
-              maxLength={250}
+              maxLength={150}
               multiline
               numberOfLines={3}
               onChangeText={(text) => onChangeText(text)}

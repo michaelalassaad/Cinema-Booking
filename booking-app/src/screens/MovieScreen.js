@@ -216,7 +216,7 @@ const MovieScreen = ({ navigation }) => {
           <Text style={styles.description}>Reviews</Text>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("Review", { movieId: getID() });
+              navigation.navigate("Experience", { movieId: getID() });
             }}
           >
             <FontAwesome5
