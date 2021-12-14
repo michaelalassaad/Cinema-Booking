@@ -57,19 +57,19 @@ const MovieScreen = ({ navigation }) => {
   useEffect(async () => {
     const id = getID(); 
     try {
-      const res = await axios.get("http://192.168.0.103:3000/movie/", {
+      const res = await axios.get("http://192.168.0.107:3000/movie/", {
         params: { movID: id },
       });
       setMovie(res.data);
-      const res1 = await axios.get("http://192.168.0.103:3000/act/", {
+      const res1 = await axios.get("http://192.168.0.107:3000/act/", {
         params: { movID: id },
       });
       setActor(res1.data);
-      const res2 = await axios.get("http://192.168.0.103:3000/dir/", {
+      const res2 = await axios.get("http://192.168.0.107:3000/dir/", {
         params: { movID: id },
       });
       setDirec(res2.data);
-      const res3 = await axios.get("http://192.168.0.103:3000/review/", {
+      const res3 = await axios.get("http://192.168.0.107:3000/review/", {
         params: { movID: id },
       });
       setReview(res3.data);
