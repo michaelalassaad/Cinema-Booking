@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import {
-    StyleSheet, KeyboardAvoidingView, Text, Image, View, TextInput, Keyboard,
+    StyleSheet, KeyboardAvoidingView, Text, View, TextInput, Keyboard,
     TouchableWithoutFeedback, Platform, SafeAreaView
 } from "react-native";
 import { Button } from "react-native-elements/dist/buttons/Button";
 import { LinearGradient } from "expo-linear-gradient";
-import { AirbnbRating, Rating } from "react-native-elements";
+import { AirbnbRating } from "react-native-elements";
 import axios from "axios";
 import AuthContext from "../context/AuthContext";
 import { Tab } from "react-native-elements/dist/tab/Tab";
@@ -27,7 +27,7 @@ const MovieReview = ({ navigation }) => {
         else
             setBra("Zahle");
 
-
+        
 
 
     }, [index]);
@@ -38,7 +38,7 @@ const MovieReview = ({ navigation }) => {
 
     // const addRev = async () => {
     //     try {
-    //         const res = await axios.post("http://192.168.0.105:3000/add_experience/", {
+    //         const res = await axios.post("http://172.20.10.2:3000/add_experience/", {
     //             cID: custId,
     //         })
     //     } catch {

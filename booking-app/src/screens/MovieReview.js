@@ -28,7 +28,7 @@ const MovieReview = ({ navigation }) => {
 
   useEffect(async () => {
     try {
-      const res = await axios.get("http://192.168.0.105:3000/movie/", {
+      const res = await axios.get("http://172.20.10.2:3000/movie/", {
         params: { movID: id },
       });
       setMovie(res.data);
@@ -45,7 +45,7 @@ const MovieReview = ({ navigation }) => {
 
   const addRev = async () => {
     try {
-      const res = await axios.post("http://192.168.0.105:3000/add_review/", {
+      const res = await axios.post("http://172.20.10.2:3000/add_review/", {
         mID: id,
         cID: custId,
         rating: ratings,
