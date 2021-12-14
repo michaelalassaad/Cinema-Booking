@@ -6,7 +6,7 @@ import LoginForm from "../components/LoginForm";
 import AuthContext from "../context/AuthContext";
 
 const SignupScreen = ({ navigation }) => {
-  const { custId, setCustId } = useContext(AuthContext);
+  const { custID, setcustID } = useContext(AuthContext);
   const [error, setError] = useState("");
 
   const signup = async (email, pass, fname, lname, phone) => {
@@ -18,8 +18,8 @@ const SignupScreen = ({ navigation }) => {
         email: email,
         pass: pass,
       });
-      const id = res.data.custId;
-      setCustId(id); //authentication
+      const id = res.data.custID;
+      setcustID(id); //authentication
       navigation.navigate("mainFlow");
     } catch (err) {
       setError(err.response.data);

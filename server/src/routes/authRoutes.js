@@ -23,7 +23,7 @@ router.post("/signin", (req, res) => {
         if (result[0]) {
           if (password == result[0].pass) {
             //The result is returned in an array
-            return res.send({ custId: result[0].customerID });
+            return res.send({ custID: result[0].customerID });
           } else return res.status(422).send("Incorrect password");
         } else {
           return res.status(422).send("Email not found");
@@ -50,7 +50,7 @@ router.post("/signup", async (req, res) => {
             return res.status(422).send("Account already exists");
           return res.status(422).send(err);
         } else {
-          return res.send({ custId: id });
+          return res.send({ custID: id });
         }
       }
     );

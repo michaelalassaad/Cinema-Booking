@@ -21,7 +21,7 @@ import AuthContext from "../context/AuthContext";
 const MovieReview = ({ navigation }) => {
   const [movie, setMovie] = useState("");
   const [value, onChangeText] = useState(null);
-  const { custId } = useContext(AuthContext);
+  const { custID } = useContext(AuthContext);
   const id = navigation.getParam("movieId");
   const [ratings, setRating] = useState(5);
   const heightOffset = 0.1 * Dimensions.get("window").height;
@@ -47,7 +47,7 @@ const MovieReview = ({ navigation }) => {
     try {
       const res = await axios.post("http://192.168.1.70:3000/add_review/", {
         mID: id,
-        cID: custId,
+        cID: custID,
         rating: ratings,
         review: value,
       });
