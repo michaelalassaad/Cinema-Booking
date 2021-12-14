@@ -6,6 +6,7 @@ import HomeScreen from "./src/screens/HomeScreen";
 import SignupScreen from "./src/screens/SignupScreen";
 import MovieScreen from "./src/screens/MovieScreen";
 import MovieReview from "./src/screens/MovieReview";
+import BookingScreen from "./src/screens/BookingScreen";
 import { AuthProvider } from "./src/context/AuthContext";
 
 const navigator = createSwitchNavigator(
@@ -19,6 +20,7 @@ const navigator = createSwitchNavigator(
       Home: HomeScreen,
       Movie: MovieScreen,
       Review: MovieReview,
+      Book: BookingScreen,
     }),
   },
   {

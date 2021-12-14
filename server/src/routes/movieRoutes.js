@@ -107,16 +107,17 @@ router.post("/add_review", (req, res) => {
 
     db.query(
       `INSERT INTO MOVIE_REVIEW VALUES ("${id}", ${rating}, "${review}")`,
-      (err2) => {}
-    );
-    db.query(
-      `INSERT INTO GIVES_MOV_REVIEW VALUES ("${cID}", "${mID}", "${id}")`,
-      (err3) => {
-        if (err3) {
-          return res.status(422).send(err3);
-        }
+      (err2, result2) => {
+        if (err2) return res.status(422).send(err2.code);
+        db.query(
+          `INSERT INTO GIVES_MOV_REVIEW VALUES ("${cID}", "${mID}", "${id}")`,
+          (err3) => {
+            if (err3) return res.status(422).send(err3);
+          }
+        );
       }
     );
   });
 });
+
 module.exports = router;

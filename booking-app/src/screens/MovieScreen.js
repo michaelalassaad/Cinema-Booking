@@ -15,6 +15,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import ReviewCard from "../components/ReviewCard";
 import axios from "axios";
 import AuthContext from "../context/AuthContext";
+import { NavigationEvents } from "react-navigation";
 
 //Inside navigation, we have the prop id.
 
@@ -29,6 +30,17 @@ const MovieScreen = ({ navigation }) => {
 
   const getID = () => {
     return navigation.getParam("id");
+  };
+
+  const getReviews = async (id) => {
+    try {
+      const res3 = await axios.get("http://192.168.1.70:3000/review/", {
+        params: { movID: id },
+      });
+      setReview(res3.data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const actors = () => {
@@ -69,10 +81,8 @@ const MovieScreen = ({ navigation }) => {
         params: { movID: id },
       });
       setDirec(res2.data);
-      const res3 = await axios.get("http://192.168.1.70:3000/review/", {
-        params: { movID: id },
-      });
-      setReview(res3.data);
+
+      getReviews(id);
 
       if (
         parseInt(res.data.releaseDate.substring(0, 4)) < 2021 ||
@@ -90,6 +100,7 @@ const MovieScreen = ({ navigation }) => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+      <NavigationEvents onDidFocus={() => getReviews(getID())} />
       <View>
         <Text style={styles.title}>{movie.title}</Text>
       </View>

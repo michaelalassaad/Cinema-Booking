@@ -51,7 +51,7 @@ const MovieReview = ({ navigation }) => {
         rating: ratings,
         review: value,
       });
-    } catch {
+    } catch (err) {
       console.log(err);
     }
   };
@@ -131,7 +131,7 @@ const MovieReview = ({ navigation }) => {
               }}
               onPress={() => {
                 addRev();
-                navigation.navigate("Movie", { movieID: id });
+                navigation.pop();
               }}
             />
           </View>
