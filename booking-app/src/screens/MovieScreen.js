@@ -6,6 +6,7 @@ import {
   View,
   TouchableOpacity,
   Modal,
+  SectionList,
 } from "react-native";
 import { Button, Divider } from "react-native-elements";
 import { LinearGradient } from "expo-linear-gradient";
@@ -21,7 +22,7 @@ import { NavigationEvents } from "react-navigation";
 
 const MovieScreen = ({ navigation }) => {
   const [movie, setMovie] = useState(null);
-  const { custId, setCustId } = useContext(AuthContext);
+  const [list, setList] = useState([]);
   const [actor, setActor] = useState([]);
   const [direc, setDirec] = useState([]);
   const [review, setReview] = useState([]);
@@ -95,6 +96,9 @@ const MovieScreen = ({ navigation }) => {
       ) {
         setDis(true);
       }
+
+      const res3 = await axios.get("http://192.168.1.70:3000/food");
+      setList(res3.data);
     } catch (err) {
       console.log(err);
     }
@@ -175,8 +179,12 @@ const MovieScreen = ({ navigation }) => {
           end: { x: 1, y: 0.5 },
         }}
         onPress={() => {
-          navigation.navigate("Home");
-        }} //to be changed
+          navigation.navigate("Book", {
+            movieID: getID(),
+            movieName: movie.title,
+            foodList: list,
+          });
+        }}
       />
 
       <View style={styles.container4}>
