@@ -15,6 +15,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import ReviewCard from "../components/ReviewCard";
 import axios from "axios";
 import AuthContext from "../context/AuthContext";
+import { NavigationEvents } from "react-navigation";
 
 //Inside navigation, we have the prop id.
 
@@ -29,6 +30,17 @@ const MovieScreen = ({ navigation }) => {
 
   const getID = () => {
     return navigation.getParam("id");
+  };
+
+  const getReviews = async (id) => {
+    try {
+      const res3 = await axios.get("http://192.168.0.105:3000/review/", {
+        params: { movID: id },
+      });
+      setReview(res3.data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const actors = () => {
@@ -55,32 +67,34 @@ const MovieScreen = ({ navigation }) => {
   };
 
   useEffect(async () => {
-    const id = getID(); 
+    const id = getID();
     try {
-      const res = await axios.get("http://192.168.0.107:3000/movie/", {
+      const res = await axios.get("http://192.168.0.105:3000/movie/", {
         params: { movID: id },
       });
       setMovie(res.data);
-      const res1 = await axios.get("http://192.168.0.107:3000/act/", {
+      const res1 = await axios.get("http://192.168.0.105:3000/act/", {
         params: { movID: id },
       });
       setActor(res1.data);
-      const res2 = await axios.get("http://192.168.0.107:3000/dir/", {
+      const res2 = await axios.get("http://192.168.0.105:3000/dir/", {
         params: { movID: id },
       });
       setDirec(res2.data);
-      const res3 = await axios.get("http://192.168.0.107:3000/review/", {
+      const res3 = await axios.get("http://192.168.0.105:3000/review/", {
         params: { movID: id },
       });
       setReview(res3.data);
 
+      getReviews(id);
 
-      if (parseInt(res.data.releaseDate.substring(0, 4)) < 2021 ||
+      if (
+        parseInt(res.data.releaseDate.substring(0, 4)) < 2021 ||
         (parseInt(res.data.releaseDate.substring(0, 4)) == 2021 &&
-          parseInt(res.data.releaseDate.substring(5, 7)) < 7)) {
-        setDis(true)
+          parseInt(res.data.releaseDate.substring(5, 7)) < 7)
+      ) {
+        setDis(true);
       }
-
     } catch (err) {
       console.log(err);
     }
@@ -90,24 +104,27 @@ const MovieScreen = ({ navigation }) => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+      <NavigationEvents onDidFocus={() => getReviews(getID())} />
       <View>
         <Text style={styles.title}>{movie.title}</Text>
       </View>
 
       <View style={styles.upperContainer}>
-
         <Modal
           visible={showM}
           transparent
-          onRequestClose={() =>
-            setShowM(false)
-          }
+          onRequestClose={() => setShowM(false)}
         >
           <TouchableOpacity onPress={() => setShowM(false)} style={styles.mod}>
-            <Image source={{ uri: movie.poster }}
+            <Image
+              source={{ uri: movie.poster }}
               style={{
-                width: '85%', height: '60%', borderColor: "#1E1F21", borderWidth: 7,
-              }} />
+                width: "85%",
+                height: "60%",
+                borderColor: "#1E1F21",
+                borderWidth: 7,
+              }}
+            />
           </TouchableOpacity>
         </Modal>
 
@@ -285,7 +302,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 15,
     height: 220,
-  }, 
+  },
   text: {
     color: "#cfcfcf",
     fontSize: 15,

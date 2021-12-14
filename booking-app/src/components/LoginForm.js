@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import {
-  View, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard,
+  View,
+  StyleSheet,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
   Platform,
   Dimensions,
 } from "react-native";
@@ -20,7 +24,7 @@ const LoginForm = ({
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
   const [phone, setPhone] = useState("");
-  var heightOffset = - Dimensions.get("window").height * 0.25;
+  var heightOffset = -Dimensions.get("window").height * 0.25;
 
   const info = (
     <View style={styles.infoContainer}>
@@ -67,12 +71,12 @@ const LoginForm = ({
     </View>
   );
 
-  return ( 
+  return (
     <KeyboardAvoidingView
       contentContainerStyle={{ flex: 1 }}
       style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "position" : "height"}
-      keyboardVerticalOffset={heightOffset} ///THIS MIGHT HAVE TO BE CHANGED BASED ON SCREEN HEIGHT AND HEIGHT OF SINGUP
+      keyboardVerticalOffset={heightOffset}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.login}>
@@ -91,7 +95,9 @@ const LoginForm = ({
                 onChangeText={(t) => setMail(t)}
                 value={mail}
                 fontSize={17}
-                leftIcon={<Feather name={"mail"} size={20} style={styles.text} />}
+                leftIcon={
+                  <Feather name={"mail"} size={20} style={styles.text} />
+                }
                 leftIconContainerStyle={{ marginHorizontal: 15 }}
                 autoCorrect={false}
                 autoCapitalize={"none"}
@@ -104,7 +110,9 @@ const LoginForm = ({
                 value={pass}
                 onChangeText={(t) => setPass(t)}
                 fontSize={17}
-                leftIcon={<Feather name={"lock"} size={20} style={styles.text} />}
+                leftIcon={
+                  <Feather name={"lock"} size={20} style={styles.text} />
+                }
                 leftIconContainerStyle={{ marginHorizontal: 15 }}
                 blur={true}
                 autoCorrect={false}

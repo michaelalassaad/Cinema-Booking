@@ -38,7 +38,7 @@ const MovieReview = ({ navigation }) => {
 
     // const addRev = async () => {
     //     try {
-    //         const res = await axios.post("http://192.168.0.107:3000/add_experience/", {
+    //         const res = await axios.post("http://192.168.0.105:3000/add_experience/", {
     //             cID: custId,
     //         })
     //     } catch {
