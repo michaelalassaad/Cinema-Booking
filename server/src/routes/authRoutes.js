@@ -33,6 +33,8 @@ router.post("/signin", (req, res) => {
   );
 });
 
+
+
 router.post("/signup", async (req, res) => {
   const { fname, lname, phone, email, pass } = req.body;
   if (!fname || !lname || !phone || !email || !pass)

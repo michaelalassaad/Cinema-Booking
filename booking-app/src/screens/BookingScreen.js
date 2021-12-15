@@ -7,7 +7,6 @@ import {
   View,
   FlatList,
 } from "react-native";
-import { NavigationEvents } from "react-navigation";
 import { Button, ButtonGroup, Overlay, Divider } from "react-native-elements";
 import SelectDropdown from "react-native-select-dropdown";
 import AuthContext from "../context/AuthContext";
@@ -27,7 +26,6 @@ const BookingScreen = ({ navigation }) => {
   const [freeSeats, setFreeSeats] = useState(null);
   const [selectedSeat, setSelectedSeat] = useState(null);
   const [ticketID, setTicketID] = useState(null);
-
   const [displaySeats, setDisplaySeats] = useState(false);
 
   const movieID = navigation.getParam("movieID");
@@ -35,21 +33,33 @@ const BookingScreen = ({ navigation }) => {
   const moviePoster = navigation.getParam("moviePoster");
   const foodList = navigation.getParam("foodList");
 
-  const branches = ["Byblos", "Beirut", "Zahle"]; //see if you can automate fetching the branches
-  const dates = ["2021-12-15", "2021-12-16", "2021-12-17"]; //see if you can automate fetching the dates
+  const branches = ["Byblos", "Beirut", "Zahle"];
+  const dates = ["2021-12-15", "2021-12-16", "2021-12-17"];
   const state = [];
+  const qts = [];
+
   for (i = 0; i < foodList.length; i++) {
     state.push(useState(0));
   }
+
+  for (i = 0; i < foodList.length; i++) {
+    qts.push(useState({}));
+  }
+
   const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(
     () => {
       var a = 0;
       for (i = 0; i < state.length; i++) {
+        var key = foodList[i].foodID;
+        console.log(state[i][0], key);
+
+        qts[i][[foodList[i].foodID]] = state[i][0] / foodList[i].price;
         a += state[i][0];
       }
       setTotalPrice(a);
+      console.log(qts);
     },
     state.map((item) => item[0])
   );
@@ -90,7 +100,6 @@ const BookingScreen = ({ navigation }) => {
     <View>
       <FlatList
         style={styles.container}
-
         //Above Food Component
         ListHeaderComponent={
           <View>
@@ -103,7 +112,6 @@ const BookingScreen = ({ navigation }) => {
               </View>
             </View>
 
-
             <Text style={styles.description}>Choose a Branch</Text>
             <ButtonGroup
               buttons={["Byblos", "Beirut", "Zahle"]}
@@ -111,8 +119,7 @@ const BookingScreen = ({ navigation }) => {
               onPress={(newIndex) => {
                 setSelectedBranch(newIndex);
                 setSelectedScreening(null);
-              }
-              }
+              }}
               buttonStyle={{ backgroundColor: "#cfcfcf" }}
               selectedButtonStyle={{ backgroundColor: "blue" }}
               selectedIndex={selectedBranch}
@@ -126,8 +133,7 @@ const BookingScreen = ({ navigation }) => {
               onPress={(newIndex) => {
                 setSelectedDate(newIndex);
                 setSelectedScreening(null);
-              }
-              }
+              }}
               buttonStyle={{ backgroundColor: "#cfcfcf" }}
               selectedButtonStyle={{ backgroundColor: "blue" }}
               selectedIndex={selectedDate}
@@ -149,20 +155,29 @@ const BookingScreen = ({ navigation }) => {
                 />
               </View>
             ) : (
-              <Text style={styles.warning}>No screenings {dates[selectedDate] ? `found on ${dates[selectedDate]}` : "found"}
-                {branches[selectedBranch] ? ` in ${branches[selectedBranch]}` : ""}</Text>
+              <Text style={styles.warning}>
+                No screenings{" "}
+                {dates[selectedDate]
+                  ? `found on ${dates[selectedDate]}`
+                  : "found"}
+                {branches[selectedBranch]
+                  ? ` in ${branches[selectedBranch]}`
+                  : ""}
+              </Text>
             )}
 
             {!selectedScreening ? (
               <Text style={styles.warning}>No screening is selected</Text>
             ) : (
               <View>
+                <Image
+                  source={require("../../MovSeat.png")}
+                  style={styles.image2}
+                />
 
-
-
-                <Image source={require('../../MovSeat.png')} style={styles.image2} />
-
-                <Text style={styles.description}>Choose one of the following available seats:</Text>
+                <Text style={styles.description}>
+                  Choose one of the following available seats:
+                </Text>
 
                 {displaySeats ? (
                   <SelectDropdown
@@ -170,29 +185,46 @@ const BookingScreen = ({ navigation }) => {
                     onSelect={(selectedItem, index) => {
                       setSelectedSeat(selectedItem);
                     }}
-                    buttonStyle={{ width: 400, marginTop: 7, marginBottom: 35, borderRadius: 5, backgroundColor: "#cfcfcf" }}
+                    buttonStyle={{
+                      width: 400,
+                      marginTop: 7,
+                      marginBottom: 35,
+                      borderRadius: 5,
+                      backgroundColor: "#cfcfcf",
+                    }}
                   />
                 ) : null}
               </View>
             )}
 
-            <View style={{ backgroundColor: "#1E1F21", flexDirection: "row", marginTop: 20}}>
-              <Text style={{
-                color: "#cfcfcf",
-                fontSize: 17,
-                fontWeight: "bold",
-                marginTop: 25,
-                marginLeft: 5,
-                width: '80%'
-              }}>Want food ready when the movie starts? Choose below</Text>
-              <Icon
-                name="fast-food-sharp"
-                color="#cfcfcf"
-                size={75}
-              />
+            <View
+              style={{
+                backgroundColor: "#1E1F21",
+                flexDirection: "row",
+                marginTop: 20,
+              }}
+            >
+              <Text
+                style={{
+                  color: "#cfcfcf",
+                  fontSize: 17,
+                  fontWeight: "bold",
+                  marginTop: 25,
+                  marginLeft: 5,
+                  width: "80%",
+                }}
+              >
+                Want food ready when the movie starts? Choose below
+              </Text>
+              <Icon name="fast-food-sharp" color="#cfcfcf" size={75} />
             </View>
-            <ScrollView style={{ backgroundColor: "#1E1F21", borderRadius: 10, height: 350 }}>
-
+            <ScrollView
+              style={{
+                backgroundColor: "#1E1F21",
+                borderRadius: 10,
+                height: 350,
+              }}
+            >
               <FlatList
                 data={foodList}
                 renderItem={(element) => {
@@ -226,28 +258,53 @@ const BookingScreen = ({ navigation }) => {
                 end: { x: 1, y: 0.5 },
               }}
               onPress={async () => {
-                const res4 = await axios.post( 
-                  "http://172.20.10.2:3000/confirmBooking", 
+                const res4 = await axios.post(
+                  "http://172.20.10.2:3000/confirmBooking",
                   {
                     custID: custID,
+                    selectedSeat: selectedSeat,
+                    ticketID: ticketID,
+                    screeningID: selectedScreening,
                   }
                 );
+
+                console.log(qts);
+
+                for (i = 0; i < qts.length; i++) {
+                  for (const [key, value] of Object.entries(qts[i])) {
+                    console.log(key, value);
+                    await axios.post("http://172.20.10.2:3000/confirmFood", {
+                      custID: custID,
+                      foodID: key,
+                      qty: value,
+                    });
+                  }
+                }
+
                 setTicketID(res4.data);
                 setOverlayVisible(true);
               }}
             />
             <Overlay isVisible={overlayVisible}>
               <Text>
-                You have succesfully booked a ticket. Please arrive at the location at least 30
-                mins before the start of the movie to pay for the ticket. Failure to
-                do so will result in cancellation of the ticket. For reference: Ticket
-                ID - {ticketID}
+                You have succesfully booked a ticket. Please arrive at the
+                location at least 30 mins before the start of the movie to pay
+                for the ticket. Failure to do so will result in cancellation of
+                the ticket. For reference: Ticket ID - {ticketID}
               </Text>
-              <Button onPress={() => setOverlayVisible(false)} title="Proceed" />
+              <Button
+                onPress={() => {
+                  setOverlayVisible(false);
+                  navigation.navigate("Home", {
+                    showReview: true,
+                  });
+                }}
+                title="Proceed"
+              />
             </Overlay>
           </View >
         }
-      //End of Flatlist
+        //End of Flatlist
       />
     </View >
   );
@@ -293,7 +350,7 @@ const styles = StyleSheet.create({
     width: 350,
     height: 275,
     borderRadius: 10,
-    marginTop: 20
+    marginTop: 20,
   },
   description: {
     color: "#cfcfcf",
@@ -309,7 +366,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginHorizontal: 15,
     alignSelf: "center",
-    textAlign: "center"
+    textAlign: "center",
   },
 });
 

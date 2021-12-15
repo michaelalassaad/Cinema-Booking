@@ -13,52 +13,55 @@ const FoodItem = ({ foodName, unitPrice, totalPrice, setTotalPrice }) => {
   }, [checked]);
 
   return (
-      <View>
-        <CheckBox
-          center
-          onPress={() => {
-            setChecked(!checked);
+    <View>
+      <CheckBox
+        center
+        onPress={() => {
+          setChecked(!checked);
+        }}
+        checked={checked}
+        checkedColor="blue"
+        title={foodName}
+      />
+      <View style={styles.rowContainer}>
+        <SelectDropdown
+          data={arr}
+          onSelect={(selectedItem, index) => {
+            setQty(selectedItem);
+            setTotalPrice(selectedItem * unitPrice);
           }}
-          checked={checked}
-          checkedColor="blue" 
-          title={foodName}
+          defaultButtonText="0"
+          buttonStyle={{
+            width: "71%",
+            borderRadius: 3,
+            backgroundColor: "#cfcfca",
+          }}
+          disabled={!checked}
         />
-        <View style={styles.rowContainer}>
-          <SelectDropdown
-            data={arr}
-            onSelect={(selectedItem, index) => {
-              setQty(selectedItem);
-              setTotalPrice(selectedItem * unitPrice);
-            }}
-            defaultButtonText="0"
-            buttonStyle={{ width: '71%', borderRadius: 3, backgroundColor: "#cfcfca" }}
-            disabled={!checked}
-          />
-          <View style={styles.text}>
-            <Text style={styles.price}>Price: {totalPrice}</Text>
-          </View>
+        <View style={styles.text}>
+          <Text style={styles.price}>Price: {totalPrice}</Text>
         </View>
-      </View> 
+      </View>
+    </View>
   );
 };
 
-const styles = StyleSheet.create({ 
+const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: "row",
     justifyContent: "space-evenly",
-    marginHorizontal: 5
+    marginHorizontal: 5,
   },
   text: {
     backgroundColor: "#cfcfca",
     borderRadius: 3,
     width: "25%",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   price: {
-    fontWeight: "bold"
-  }
-
+    fontWeight: "bold",
+  },
 });
 
 export default FoodItem;

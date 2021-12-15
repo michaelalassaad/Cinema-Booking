@@ -1,26 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, FlatList, View } from "react-native";
+import { StyleSheet, FlatList, View, Text, Button } from "react-native";
 import MovieCard from "../components/MovieCard";
-import { SearchBar, Tab } from "react-native-elements";
+import { SearchBar, Tab, Overlay } from "react-native-elements";
 import axios from "axios";
+import { NavigationEvents } from "react-navigation";
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const [movies, setMovies] = useState(null);
   const [term, setTerm] = useState("");
   const [index, setIndex] = useState(0);
+  const [showReview, setShowReview] = useState(false);
 
   useEffect(async () => {
     if (index == 0) {
-      try {  
-        const res = await axios.get("http://172.20.10.2:3000/now");  
+      try {
+        const res = await axios.get("http://172.20.10.2:3000/now");
         setTerm("");
         setMovies(res.data);
       } catch (err) {
         console.log(err);
       }
     } else {
-      try {  
-        const res = await axios.get("http://172.20.10.2:3000/all");  
+      try {
+        const res = await axios.get("http://172.20.10.2:3000/all");
         setTerm("");
         setMovies(res.data);
       } catch (err) {
@@ -30,8 +32,8 @@ const HomeScreen = () => {
   }, [index]);
 
   const search = async (searchTerm) => {
-    try {  
-      const res = await axios.get("http://172.20.10.2:3000/search", {  
+    try {
+      const res = await axios.get("http://172.20.10.2:3000/search", {
         params: {
           term: searchTerm,
           filter: index,
@@ -50,6 +52,18 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
+      <NavigationEvents
+        onWillFocus={() => {
+          console.log(navigation);
+          if (navigation.getParam("showReview")) {
+            console.log(showReview);
+            setShowReview(navigation.getParam("showReview"));
+          } else setShowReview(false);
+        }}
+        onDidBlur={() => {
+          setShowReview(false);
+        }}
+      />
       <View>
         <SearchBar
           placeholder="Type Here..."
@@ -86,6 +100,19 @@ const HomeScreen = () => {
           return <MovieCard movie={item} />;
         }}
       />
+
+      <Overlay
+        isVisible={showReview}
+        onBackdropPress={() => setShowReview(false)}
+      >
+        <Text>Do you want to review us?</Text>
+        <Button
+          onPress={() => {
+            navigation.navigate("About");
+          }}
+          title="Review"
+        />
+      </Overlay>
     </View>
   );
 };
@@ -94,7 +121,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#303337",
     flex: 1,
-  }, 
+  },
   unpressed: {
     color: "grey",
     fontSize: 15,

@@ -16,8 +16,8 @@ const LoginScreen = ({ navigation }) => {
   const [error, setError] = useState("");
 
   const login = async (email, pass) => {
-    try { 
-      const res = await axios.post("http://172.20.10.2:3000/signin", { 
+    try {
+      const res = await axios.post("http://172.20.10.2:3000/signin", {
         email: email,
         pass: pass,
       });
