@@ -103,7 +103,7 @@ router.post("/add_review", (req, res) => {
   const review = req.body.review;
   var id;
   db.query("SELECT MAX(movRevID) AS max FROM MOVIE_REVIEW", (err1, result) => {
-    id = "A" + (parseInt(result[0].max.slice(1)) + 1).toString();
+    id = "W" + (parseInt(result[0].max.slice(1)) + 1).toString();
 
     db.query(
       `INSERT INTO MOVIE_REVIEW VALUES ("${id}", ${rating}, "${review}")`,
