@@ -58,8 +58,8 @@ const BookingScreen = ({ navigation }) => {
     setFreeSeats(null);
     setDisplaySeats(false);
     if (selectedBranch >= 0 && selectedDate >= 0) {
-      try {
-        const res1 = await axios.get("http://172.20.10.2:3000/getTimings", {
+      try { 
+        const res1 = await axios.get("http://172.20.10.2:3000/getTimings", { 
           params: {
             movieID: movieID,
             date: dates[selectedDate],
@@ -74,8 +74,8 @@ const BookingScreen = ({ navigation }) => {
   }, [selectedBranch, selectedDate]);
 
   useEffect(async () => {
-    if (selectedScreening) {
-      const res2 = await axios.get("http://172.20.10.2:3000/getFreeSeats", {
+    if (selectedScreening) { 
+      const res2 = await axios.get("http://172.20.10.2:3000/getFreeSeats", { 
         params: {
           screeningID: selectedScreening,
         },
@@ -220,8 +220,8 @@ const BookingScreen = ({ navigation }) => {
                 end: { x: 1, y: 0.5 },
               }}
               onPress={async () => {
-                const res4 = await axios.post(
-                  "http://172.20.10.2:3000/confirmBooking",
+                const res4 = await axios.post( 
+                  "http://172.20.10.2:3000/confirmBooking", 
                   {
                     custID: custID,
                   }
