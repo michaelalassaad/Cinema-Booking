@@ -10,9 +10,10 @@ import {
 import { NavigationEvents } from "react-navigation";
 import { Button, ButtonGroup, Overlay, Divider } from "react-native-elements";
 import SelectDropdown from "react-native-select-dropdown";
-import { Picker } from "@react-native-picker/picker"; 
 import AuthContext from "../context/AuthContext";
 import FoodItem from "../components/FoodItem";
+import { LinearGradient } from "expo-linear-gradient";
+import Icon from "react-native-vector-icons/Ionicons";
 import axios from "axios";
 
 const BookingScreen = ({ navigation }) => {
@@ -112,7 +113,7 @@ const BookingScreen = ({ navigation }) => {
                 setSelectedScreening(null);
               }
               }
-              buttonStyle={{ backgroundColor: "#cfcfc0" }}
+              buttonStyle={{ backgroundColor: "#cfcfcf" }}
               selectedButtonStyle={{ backgroundColor: "blue" }}
               selectedIndex={selectedBranch}
             />
@@ -127,7 +128,7 @@ const BookingScreen = ({ navigation }) => {
                 setSelectedScreening(null);
               }
               }
-              buttonStyle={{ backgroundColor: "#cfcfc0" }}
+              buttonStyle={{ backgroundColor: "#cfcfcf" }}
               selectedButtonStyle={{ backgroundColor: "blue" }}
               selectedIndex={selectedDate}
             />
@@ -142,7 +143,7 @@ const BookingScreen = ({ navigation }) => {
                     setSelectedTime(newIndex);
                     setSelectedScreening(showtimes[newIndex].screeningID);
                   }}
-                  buttonStyle={{ backgroundColor: "#cfcfc0" }}
+                  buttonStyle={{ backgroundColor: "#cfcfcf" }}
                   selectedButtonStyle={{ backgroundColor: "blue" }}
                   selectedIndex={selectedTime}
                 />
@@ -156,8 +157,12 @@ const BookingScreen = ({ navigation }) => {
               <Text style={styles.warning}>No screening is selected</Text>
             ) : (
               <View>
-                <Text>Here lies the seats</Text>
-                <Text style={styles.description}>Choose one of the following free seats:</Text>
+
+
+
+                <Image source={require('../../MovSeat.png')} style={styles.image2} />
+
+                <Text style={styles.description}>Choose one of the following available seats:</Text>
 
                 {displaySeats ? (
                   <SelectDropdown
@@ -165,13 +170,26 @@ const BookingScreen = ({ navigation }) => {
                     onSelect={(selectedItem, index) => {
                       setSelectedSeat(selectedItem);
                     }}
-                    buttonStyle={{ width: 400, marginTop: 7, marginBottom: 35 }}
+                    buttonStyle={{ width: 400, marginTop: 7, marginBottom: 35, borderRadius: 5, backgroundColor: "#cfcfcf" }} 
                   />
                 ) : null}
               </View>
             )}
 
-            <Text style={styles.description}>Want food ready when the movie starts? Choose below</Text>
+            <View style={{ flexDirection: "row", marginTop: 25, marginHorizontal: 10 }}>
+              <Text style={{
+                color: "#cfcfcf",
+                fontSize: 17,
+                fontWeight: "bold",
+                marginTop: 25,
+                width: '80%'
+              }}>Want food ready when the movie starts? Choose below</Text>
+              <Icon
+                name="fast-food-sharp"
+                color="#cfcfcf"
+                size={75}
+              />
+            </View>
           </View>}
         //Food Components
         data={foodList}
@@ -194,6 +212,13 @@ const BookingScreen = ({ navigation }) => {
           <View>
             <Button
               title="Book"
+              buttonStyle={styles.button}
+              ViewComponent={LinearGradient}
+              linearGradientProps={{
+                colors: ["#42f5ef", "#429cf5"],
+                start: { x: 0, y: 0.5 },
+                end: { x: 1, y: 0.5 },
+              }}
               onPress={async () => {
                 const res4 = await axios.post(
                   "http://192.168.0.100:3000/confirmBooking",
@@ -240,6 +265,12 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: 15,
   },
+  button: {
+    borderRadius: 30,
+    width: "90%",
+    marginVertical: 15,
+    alignSelf: "center",
+  },
   image: {
     flex: 1,
     justifyContent: "center",
@@ -248,6 +279,15 @@ const styles = StyleSheet.create({
     borderWidth: 4,
     borderColor: "#1E1F21",
     borderRadius: 10,
+  },
+  image2: {
+    flex: 1,
+    justifyContent: "center",
+    alignSelf: "center",
+    width: 350,
+    height: 275,
+    borderRadius: 10, 
+    marginTop: 20
   },
   description: {
     color: "#cfcfcf",
