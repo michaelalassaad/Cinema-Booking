@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
 import { CheckBox } from "react-native-elements";
 
@@ -13,8 +13,7 @@ const FoodItem = ({ foodName, unitPrice, totalPrice, setTotalPrice }) => {
   }, [checked]);
 
   return (
-    <View>
-      <View style={styles.container}>
+      <View>
         <CheckBox
           center
           onPress={() => {
@@ -39,12 +38,11 @@ const FoodItem = ({ foodName, unitPrice, totalPrice, setTotalPrice }) => {
             <Text style={styles.price}>Price: {totalPrice}</Text>
           </View>
         </View>
-      </View>
-    </View>
+      </View> 
   );
 };
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({ 
   rowContainer: {
     flexDirection: "row",
     justifyContent: "space-evenly",

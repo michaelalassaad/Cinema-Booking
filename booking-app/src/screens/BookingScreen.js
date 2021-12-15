@@ -170,18 +170,19 @@ const BookingScreen = ({ navigation }) => {
                     onSelect={(selectedItem, index) => {
                       setSelectedSeat(selectedItem);
                     }}
-                    buttonStyle={{ width: 400, marginTop: 7, marginBottom: 35, borderRadius: 5, backgroundColor: "#cfcfcf" }} 
+                    buttonStyle={{ width: 400, marginTop: 7, marginBottom: 35, borderRadius: 5, backgroundColor: "#cfcfcf" }}
                   />
                 ) : null}
               </View>
             )}
 
-            <View style={{ flexDirection: "row", marginTop: 25, marginHorizontal: 10 }}>
+            <View style={{ backgroundColor: "#1E1F21", flexDirection: "row", marginTop: 20}}>
               <Text style={{
                 color: "#cfcfcf",
                 fontSize: 17,
                 fontWeight: "bold",
                 marginTop: 25,
+                marginLeft: 5,
                 width: '80%'
               }}>Want food ready when the movie starts? Choose below</Text>
               <Icon
@@ -190,26 +191,31 @@ const BookingScreen = ({ navigation }) => {
                 size={75}
               />
             </View>
-          </View>}
-        //Food Components
-        data={foodList}
-        renderItem={(element) => {
-          const item = element.item;
-          const index = element.index;
-          return (
-            <FoodItem
-              foodName={item.foodName}
-              unitPrice={item.price}
-              totalPrice={state[index][0]}
-              setTotalPrice={state[index][1]}
-            />
-          );
-        }}
-        keyExtractor={(item) => item.foodName}
+            <ScrollView style={{ backgroundColor: "#1E1F21", borderRadius: 10, height: 350 }}>
 
+              <FlatList
+                data={foodList}
+                renderItem={(element) => {
+                  const item = element.item;
+                  const index = element.index;
+                  return (
+                    <FoodItem
+                      foodName={item.foodName}
+                      unitPrice={item.price}
+                      totalPrice={state[index][0]}
+                      setTotalPrice={state[index][1]}
+                    />
+                  );
+                }}
+                keyExtractor={(item) => item.foodName}
+              />
+            </ScrollView>
+          </View>
+        }
+        //Food Components
         //Below Food Components
         ListFooterComponent={
-          <View>
+          < View >
             <Button
               title="Book"
               buttonStyle={styles.button}
@@ -239,11 +245,11 @@ const BookingScreen = ({ navigation }) => {
               </Text>
               <Button onPress={() => setOverlayVisible(false)} title="Proceed" />
             </Overlay>
-          </View>
+          </View >
         }
       //End of Flatlist
       />
-    </View>
+    </View >
   );
 };
 
@@ -286,7 +292,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     width: 350,
     height: 275,
-    borderRadius: 10, 
+    borderRadius: 10,
     marginTop: 20
   },
   description: {
