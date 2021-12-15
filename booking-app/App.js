@@ -6,6 +6,7 @@ import HomeScreen from "./src/screens/HomeScreen";
 import SignupScreen from "./src/screens/SignupScreen";
 import MovieScreen from "./src/screens/MovieScreen";
 import MovieReview from "./src/screens/MovieReview";
+import ExperienceReview from "./src/screens/ExperienceReview";
 import BookingScreen from "./src/screens/BookingScreen";
 import { AuthProvider } from "./src/context/AuthContext";
 
@@ -20,7 +21,8 @@ const navigator = createSwitchNavigator(
       Home: HomeScreen,
       Movie: MovieScreen,
       Review: MovieReview,
-      Book: BookingScreen,
+      About: ExperienceReview,
+      Booking: BookingScreen,
     }),
   },
   {
@@ -58,7 +60,26 @@ MovieReview.navigationOptions = () => {
     },
   };
 };
-
+ExperienceReview.navigationOptions = () => {
+  return {
+    headerStyle: {
+      backgroundColor: "#303337",
+    },
+    headerTitleStyle: {
+      color: "#cfcfcf",
+    },
+  };
+};
+BookingScreen.navigationOptions = () => {
+  return {
+    headerStyle: {
+      backgroundColor: "#303337",
+    },
+    headerTitleStyle: {
+      color: "#cfcfcf",
+    },
+  };
+};
 const App = createAppContainer(navigator);
 
 export default () => {

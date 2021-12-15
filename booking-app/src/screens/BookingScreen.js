@@ -1,16 +1,25 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
-import { Button, ButtonGroup, Overlay } from "react-native-elements";
-import AuthContext from "../context/AuthContext";
-import { Picker } from "@react-native-picker/picker";
-import FoodList from "../components/FoodList";
-import axios from "axios";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  Image,
+  View,
+  FlatList,
+} from "react-native";
+import { NavigationEvents } from "react-navigation";
+import { Button, ButtonGroup, Overlay, Divider } from "react-native-elements";
 import SelectDropdown from "react-native-select-dropdown";
+import AuthContext from "../context/AuthContext";
+import FoodItem from "../components/FoodItem";
+import { LinearGradient } from "expo-linear-gradient";
+import Icon from "react-native-vector-icons/Ionicons";
+import axios from "axios";
 
 const BookingScreen = ({ navigation }) => {
   const { custID, setCustID } = useContext(AuthContext);
   const [selectedBranch, setSelectedBranch] = useState(-1);
-  const [selectedDate, setSelectedDate] = useState("2021-12-14");
+  const [selectedDate, setSelectedDate] = useState(-1);
   const [showtimes, setShowtimes] = useState([]);
   const [selectedTime, setSelectedTime] = useState(null);
   const [selectedScreening, setSelectedScreening] = useState(null);
@@ -23,20 +32,37 @@ const BookingScreen = ({ navigation }) => {
 
   const movieID = navigation.getParam("movieID");
   const movieName = navigation.getParam("movieName");
+  const moviePoster = navigation.getParam("moviePoster");
   const foodList = navigation.getParam("foodList");
 
-  const branches = ["Dbayeh", "Tripoli", "Beirut"]; //see if you can automate fetching the branches
+  const branches = ["Byblos", "Beirut", "Zahle"]; //see if you can automate fetching the branches
+  const dates = ["2021-12-15", "2021-12-16", "2021-12-17"]; //see if you can automate fetching the dates
+  const state = [];
+  for (i = 0; i < foodList.length; i++) {
+    state.push(useState(0));
+  }
+  const [totalPrice, setTotalPrice] = useState(0);
 
+  useEffect(
+    () => {
+      var a = 0;
+      for (i = 0; i < state.length; i++) {
+        a += state[i][0];
+      }
+      setTotalPrice(a);
+    },
+    state.map((item) => item[0])
+  );
   useEffect(async () => {
     setSelectedTime(null);
     setFreeSeats(null);
     setDisplaySeats(false);
-    if (selectedBranch >= 0 && selectedDate) {
+    if (selectedBranch >= 0 && selectedDate >= 0) {
       try {
-        const res1 = await axios.get("http://192.168.1.70:3000/getTimings", {
+        const res1 = await axios.get("http://192.168.0.100:3000/getTimings", {
           params: {
             movieID: movieID,
-            date: selectedDate,
+            date: dates[selectedDate],
             branch: branches[selectedBranch],
           },
         });
@@ -48,9 +74,8 @@ const BookingScreen = ({ navigation }) => {
   }, [selectedBranch, selectedDate]);
 
   useEffect(async () => {
-    console.log(selectedScreening);
     if (selectedScreening) {
-      const res2 = await axios.get("http://192.168.1.70:3000/getFreeSeats", {
+      const res2 = await axios.get("http://192.168.0.100:3000/getFreeSeats", {
         params: {
           screeningID: selectedScreening,
         },
@@ -62,88 +87,224 @@ const BookingScreen = ({ navigation }) => {
   }, [selectedScreening]);
 
   return (
-    <ScrollView>
-      <Text>Booking {movieName}</Text>
-      <Text>Choose a Branch</Text>
-      <ButtonGroup
-        buttons={["Dbayeh", "Tripoli", "Beirut"]}
-        containerStyle={{ height: 100 }}
-        onPress={(newIndex) => setSelectedBranch(newIndex)}
-        buttonStyle={{ backgroundColor: "blue" }}
-        selectedButtonStyle={{ backgroundColor: "grey" }}
-        selectedIndex={selectedBranch}
-      />
+    <View>
+      <FlatList
+        style={styles.container}
 
-      <Text>Choose a Date</Text>
-      <Picker
-        selectedValue={selectedDate}
-        onValueChange={(itemValue, itemIndex) => setSelectedDate(itemValue)}
-      >
-        <Picker.Item label="14/12/2021" value="2021-12-14" />
-        <Picker.Item label="15/12/2021" value="2021-12-15" />
-      </Picker>
+        //Above Food Component
+        ListHeaderComponent={
+          <View>
+            <View style={{ flex: 3 }}>
+              <View style={{ flex: 0.5 }}>
+                <Text style={styles.title}>{movieName}</Text>
+              </View>
+              <View style={styles.smovie}>
+                <Image source={{ uri: moviePoster }} style={styles.image} />
+              </View>
+            </View>
 
-      {showtimes.length >= 1 ? (
-        <ButtonGroup
-          buttons={showtimes.map((element) => element.screeningTime)}
-          containerStyle={{ height: 100 }}
-          onPress={(newIndex) => {
-            setSelectedTime(newIndex);
-            setSelectedScreening(showtimes[newIndex].screeningID);
-          }}
-          buttonStyle={{ backgroundColor: "blue" }}
-          selectedButtonStyle={{ backgroundColor: "grey" }}
-          selectedIndex={selectedTime}
-        />
-      ) : (
-        <Text>No screenings on this date and branch</Text>
-      )}
 
-      {/*add a condition like the upper place*/}
-      <Text>Choose one of the following free seats:</Text>
+            <Text style={styles.description}>Choose a Branch</Text>
+            <ButtonGroup
+              buttons={["Byblos", "Beirut", "Zahle"]}
+              containerStyle={{ height: 80 }}
+              onPress={(newIndex) => {
+                setSelectedBranch(newIndex);
+                setSelectedScreening(null);
+              }
+              }
+              buttonStyle={{ backgroundColor: "#cfcfcf" }}
+              selectedButtonStyle={{ backgroundColor: "blue" }}
+              selectedIndex={selectedBranch}
+            />
 
-      {displaySeats ? (
-        <SelectDropdown
-          data={freeSeats.map((element) => element.seatID)}
-          onSelect={(selectedItem, index) => {
-            setSelectedSeat(selectedItem);
-            console.log(selectedSeat);
-          }}
-          buttonStyle={{ width: 40 }}
-        />
-      ) : null}
+            <Text style={styles.description}>Choose a Date</Text>
 
-      <Text>Want food ready when the movie starts? Choose below</Text>
-      <FoodList foodList={foodList} />
+            <ButtonGroup
+              buttons={["15/12/2021", "16/12/2021", "17/12/2021"]}
+              containerStyle={{ height: 80 }}
+              onPress={(newIndex) => {
+                setSelectedDate(newIndex);
+                setSelectedScreening(null);
+              }
+              }
+              buttonStyle={{ backgroundColor: "#cfcfcf" }}
+              selectedButtonStyle={{ backgroundColor: "blue" }}
+              selectedIndex={selectedDate}
+            />
 
-      <Button
-        title="Book"
-        onPress={async () => {
-          console.log(custID);
-          const res4 = await axios.post(
-            "http://192.168.1.70:3000/confirmBooking",
-            {
-              custID: custID,
-            }
+            {showtimes.length >= 1 ? (
+              <View>
+                <Text style={styles.description}>Choose a Screening Time</Text>
+                <ButtonGroup
+                  buttons={showtimes.map((element) => element.screeningTime)}
+                  containerStyle={{ height: 100 }}
+                  onPress={(newIndex) => {
+                    setSelectedTime(newIndex);
+                    setSelectedScreening(showtimes[newIndex].screeningID);
+                  }}
+                  buttonStyle={{ backgroundColor: "#cfcfcf" }}
+                  selectedButtonStyle={{ backgroundColor: "blue" }}
+                  selectedIndex={selectedTime}
+                />
+              </View>
+            ) : (
+              <Text style={styles.warning}>No screenings {dates[selectedDate] ? `found on ${dates[selectedDate]}` : "found"}
+                {branches[selectedBranch] ? ` in ${branches[selectedBranch]}` : ""}</Text>
+            )}
+
+            {!selectedScreening ? (
+              <Text style={styles.warning}>No screening is selected</Text>
+            ) : (
+              <View>
+
+
+
+                <Image source={require('../../MovSeat.png')} style={styles.image2} />
+
+                <Text style={styles.description}>Choose one of the following available seats:</Text>
+
+                {displaySeats ? (
+                  <SelectDropdown
+                    data={freeSeats.map((element) => element.seatNumber)}
+                    onSelect={(selectedItem, index) => {
+                      setSelectedSeat(selectedItem);
+                    }}
+                    buttonStyle={{ width: 400, marginTop: 7, marginBottom: 35, borderRadius: 5, backgroundColor: "#cfcfcf" }} 
+                  />
+                ) : null}
+              </View>
+            )}
+
+            <View style={{ flexDirection: "row", marginTop: 25, marginHorizontal: 10 }}>
+              <Text style={{
+                color: "#cfcfcf",
+                fontSize: 17,
+                fontWeight: "bold",
+                marginTop: 25,
+                width: '80%'
+              }}>Want food ready when the movie starts? Choose below</Text>
+              <Icon
+                name="fast-food-sharp"
+                color="#cfcfcf"
+                size={75}
+              />
+            </View>
+          </View>}
+        //Food Components
+        data={foodList}
+        renderItem={(element) => {
+          const item = element.item;
+          const index = element.index;
+          return (
+            <FoodItem
+              foodName={item.foodName}
+              unitPrice={item.price}
+              totalPrice={state[index][0]}
+              setTotalPrice={state[index][1]}
+            />
           );
-          setTicketID(res4.data);
-          setOverlayVisible(true);
         }}
-      />
+        keyExtractor={(item) => item.foodName}
 
-      <Overlay isVisible={overlayVisible}>
-        <Text>
-          You have succesfully booked a ticket. Please arrive at the location 30
-          mins before the start of the movie to pay for the ticket. Failure to
-          do so will result in cancellation of the ticket. For reference: Ticket
-          ID {ticketID}
-        </Text>
-        <Button onPress={() => setOverlayVisible(false)} title="Proceed" />
-      </Overlay>
-    </ScrollView>
+        //Below Food Components
+        ListFooterComponent={
+          <View>
+            <Button
+              title="Book"
+              buttonStyle={styles.button}
+              ViewComponent={LinearGradient}
+              linearGradientProps={{
+                colors: ["#42f5ef", "#429cf5"],
+                start: { x: 0, y: 0.5 },
+                end: { x: 1, y: 0.5 },
+              }}
+              onPress={async () => {
+                const res4 = await axios.post(
+                  "http://192.168.0.100:3000/confirmBooking",
+                  {
+                    custID: custID,
+                  }
+                );
+                setTicketID(res4.data);
+                setOverlayVisible(true);
+              }}
+            />
+            <Overlay isVisible={overlayVisible}>
+              <Text>
+                You have succesfully booked a ticket. Please arrive at the location at least 30
+                mins before the start of the movie to pay for the ticket. Failure to
+                do so will result in cancellation of the ticket. For reference: Ticket
+                ID - {ticketID}
+              </Text>
+              <Button onPress={() => setOverlayVisible(false)} title="Proceed" />
+            </Overlay>
+          </View>
+        }
+      //End of Flatlist
+      />
+    </View>
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#303337",
+  },
+  smovie: {
+    backgroundColor: "#303337",
+    flex: 3,
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "stretch",
+  },
+  title: {
+    color: "#cfcfcf",
+    fontSize: 35,
+    flex: 1,
+    alignSelf: "center",
+    marginTop: 15,
+  },
+  button: {
+    borderRadius: 30,
+    width: "90%",
+    marginVertical: 15,
+    alignSelf: "center",
+  },
+  image: {
+    flex: 1,
+    justifyContent: "center",
+    width: 210,
+    height: 300,
+    borderWidth: 4,
+    borderColor: "#1E1F21",
+    borderRadius: 10,
+  },
+  image2: {
+    flex: 1,
+    justifyContent: "center",
+    alignSelf: "center",
+    width: 350,
+    height: 275,
+    borderRadius: 10, 
+    marginTop: 20
+  },
+  description: {
+    color: "#cfcfcf",
+    fontSize: 17,
+    fontWeight: "bold",
+    marginTop: 15,
+    marginLeft: 15,
+  },
+  warning: {
+    color: "#7A0B16",
+    fontSize: 17,
+    fontWeight: "bold",
+    marginTop: 15,
+    marginHorizontal: 15,
+    alignSelf: "center",
+    textAlign: "center"
+  },
+});
 
 export default BookingScreen;

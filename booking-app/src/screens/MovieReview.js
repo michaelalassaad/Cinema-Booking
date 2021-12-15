@@ -28,7 +28,7 @@ const MovieReview = ({ navigation }) => {
 
   useEffect(async () => {
     try {
-      const res = await axios.get("http://192.168.1.70:3000/movie/", {
+      const res = await axios.get("http://192.168.0.100:3000/movie/", {
         params: { movID: id },
       });
       setMovie(res.data);
@@ -45,7 +45,7 @@ const MovieReview = ({ navigation }) => {
 
   const addRev = async () => {
     try {
-      const res = await axios.post("http://192.168.1.70:3000/add_review/", {
+      const res = await axios.post("http://192.168.0.100:3000/add_review/", {
         mID: id,
         cID: custID,
         rating: ratings,
@@ -108,7 +108,7 @@ const MovieReview = ({ navigation }) => {
             </View>
             <TextInput
               editable
-              maxLength={250}
+              maxLength={150}
               multiline
               numberOfLines={3}
               onChangeText={(text) => onChangeText(text)}
