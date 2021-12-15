@@ -10,8 +10,8 @@ const SignupScreen = ({ navigation }) => {
   const [error, setError] = useState("");
 
   const signup = async (email, pass, fname, lname, phone) => {
-    try { 
-      const res = await axios.post("http://172.20.10.2:3000/signup", { 
+    try {
+      const res = await axios.post("http://172.20.10.2:3000/signup", {
         fname: fname,
         lname: lname,
         phone: phone,

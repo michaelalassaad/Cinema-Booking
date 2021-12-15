@@ -27,8 +27,8 @@ const MovieReview = ({ navigation }) => {
   const heightOffset = 0.1 * Dimensions.get("window").height;
 
   useEffect(async () => {
-    try { 
-      const res = await axios.get("http://172.20.10.2:3000/movie/", { 
+    try {
+      const res = await axios.get("http://172.20.10.2:3000/movie/", {
         params: { movID: id },
       });
       setMovie(res.data);
@@ -44,8 +44,8 @@ const MovieReview = ({ navigation }) => {
   };
 
   const addRev = async () => {
-    try { 
-      const res = await axios.post("http://172.20.10.2:3000/add_review/", { 
+    try {
+      const res = await axios.post("http://172.20.10.2:3000/add_review/", {
         mID: id,
         cID: custID,
         rating: ratings,
