@@ -35,7 +35,7 @@ const MovieScreen = ({ navigation }) => {
 
   const getReviews = async (id) => {
     try {
-      const res3 = await axios.get("http://172.20.10.2:3000/review/", {
+      const res3 = await axios.get("http://192.168.0.100:3000/review/", {
         params: { movID: id },
       });
       setReview(res3.data);
@@ -70,22 +70,24 @@ const MovieScreen = ({ navigation }) => {
   useEffect(async () => {
     const id = getID();
     try {
-      const res = await axios.get("http://172.20.10.2:3000/movie/", {
+      const res = await axios.get("http://192.168.0.100:3000/movie/", {
         params: { movID: id },
       });
       setMovie(res.data);
-      const res1 = await axios.get("http://172.20.10.2:3000/act/", {
+      const res1 = await axios.get("http://192.168.0.100:3000/act/", {
         params: { movID: id },
       });
       setActor(res1.data);
-      const res2 = await axios.get("http://172.20.10.2:3000/dir/", {
+      const res2 = await axios.get("http://192.168.0.100:3000/dir/", {
         params: { movID: id },
       });
       setDirec(res2.data);
-      const res3 = await axios.get("http://172.20.10.2:3000/review/", {
+      const res3 = await axios.get("http://192.168.0.100:3000/review/", {
         params: { movID: id },
       });
       setReview(res3.data);
+      const res4 = await axios.get("http://192.168.0.100:3000/food");
+      setList(res4.data);
 
       getReviews(id);
 
@@ -96,9 +98,6 @@ const MovieScreen = ({ navigation }) => {
       ) {
         setDis(true);
       }
-
-      const res3 = await axios.get("http://192.168.1.70:3000/food");
-      setList(res3.data);
     } catch (err) {
       console.log(err);
     }
@@ -179,9 +178,10 @@ const MovieScreen = ({ navigation }) => {
           end: { x: 1, y: 0.5 },
         }}
         onPress={() => {
-          navigation.navigate("Book", {
+          navigation.navigate("Booking", {
             movieID: getID(),
             movieName: movie.title,
+            moviePoster: movie.poster,
             foodList: list,
           });
         }}
@@ -224,7 +224,7 @@ const MovieScreen = ({ navigation }) => {
           <Text style={styles.description}>Reviews</Text>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("Review", { movieId: getID() });
+              navigation.navigate("About", { movieId: getID() });
             }}
           >
             <FontAwesome5

@@ -7,7 +7,7 @@ const router = express.Router();
 const db = mysql.createPool({
   host: "localhost",
   user: "root",
-  password: "root",
+  password: "4737",
   database: "CINEMABOOKING",
 });
 
@@ -19,7 +19,7 @@ router.get("/getTimings", (req, res) => {
   const date = req.query.date;
   const branch = req.query.branch;
   db.query(
-    `SELECT screeningTime, screeningID FROM SCREENING S NATURAL JOIN BRANCH WHERE S.movieID = '${movieID}' AND S.screeningDate = '${date}' AND location = '${branch}'`,
+    `SELECT screeningTime, screeningID FROM SCREENING S NATURAL JOIN BRANCH WHERE S.movieID = '${movieID}' AND S.screeningDate = '${date}' AND location LIKE '%${branch}%'`,
     (err, result) => {
       if (err) res.status(422).send(err);
       else {
@@ -29,25 +29,12 @@ router.get("/getTimings", (req, res) => {
   );
 });
 
-//get the seats based on the selection of the time
-router.get("/getBookedSeats", (req, res) => {
-  const screeningID = req.query.screeningID;
-  db.query(
-    `SELECT seatID FROM RESERVES WHERE screeningID = '${screeningID}'`,
-    (err, result) => {
-      if (err) res.status(422).send(err);
-      else {
-        res.send(result);
-      }
-    }
-  );
-});
-
+//get the available seats based on the selection of the time
 router.get("/getFreeSeats", (req, res) => {
   const screeningID = req.query.screeningID;
 
   db.query(
-    `SELECT seatID FROM SEAT WHERE seatID NOT IN (SELECT seatID FROM RESERVES WHERE screeningID = '${screeningID}')`,
+    `SELECT seatNumber FROM SEAT WHERE seatID NOT IN (SELECT seatID FROM RESERVES WHERE screeningID = '${screeningID}')`,
     (err, result) => {
       if (err) res.status(422).send(err);
       else {

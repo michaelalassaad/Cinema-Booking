@@ -144,7 +144,7 @@ router.post("/add_experience", (req, res) => {
   const food = req.body.food;
   const service = req.body.service;
   const comment = req.body.comment;
- 
+  console.log(bID, " ", cID);
   var id;
   db.query("SELECT MAX(expRevID) AS max FROM EXPERIENCE_REVIEW", (err1, result) => {
     id = "E" + (parseInt(result[0].max.slice(1)) + 1).toString();
@@ -152,13 +152,13 @@ router.post("/add_experience", (req, res) => {
     db.query(
       `INSERT INTO EXPERIENCE_REVIEW VALUES ("${id}", ${overall}, ${screening}, ${food}, ${service}, "${comment}")`,
       (err2, result2) => {
-        if (err2) return res.status(422).send(err2.code); 
-        db.query(
-          `INSERT INTO gives_exp_review VALUES ("${bID}", "${cID}", "${id}")`,
-          (err3) => {
-            if (err3) return res.status(422).send(err3);
-          }
-        );
+        if (err2) return res.status(422).send(err2.code);
+      }
+    );
+    db.query(
+      `INSERT INTO gives_exp_review VALUES ("${bID}", "${cID}", "${id}")`,
+      (err3) => {
+        if (err3) return res.status(422).send(err3);
       }
     );
   });

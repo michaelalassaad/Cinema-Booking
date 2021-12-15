@@ -11,9 +11,9 @@ import axios from "axios";
 
 
 
-const MovieReview = ({ navigation }) => {
+const ExperienceReview = ({ navigation }) => {
     const [value, onChangeText] = useState(null);
-    const { custId } = useContext(AuthContext);
+    const { custID } = useContext(AuthContext);
     const [index, setIndex] = useState(0);
     const [branch, setBranch] = useState("");
     const [overall, setOverall] = useState(5);
@@ -37,13 +37,13 @@ const MovieReview = ({ navigation }) => {
 
         try {
 
-            const res = await axios.get("http://172.20.10.2:3000/branch/", {
+            const res = await axios.get("http://192.168.0.100:3000/branch/", {
                 params: { branch: bra }
             });
             setBranch(res.data);
             bID = res.data
 
-            const res2 = await axios.get("http://172.20.10.2:3000/staff/", {
+            const res2 = await axios.get("http://192.168.0.100:3000/staff/", {
                 params: { branch: bID.branchID }
             });
             setEmpl(res2.data);
@@ -82,8 +82,10 @@ const MovieReview = ({ navigation }) => {
     };
 
     const addRev = async () => {
-        try { const res = await axios.post("http://172.20.10.2:3000/add_experience/", {
-                cID: custId,
+        try {
+            console.log("Cust", custID);
+            const res = await axios.post("http://192.168.0.100:3000/add_experience/", {
+                cID: custID,
                 bID: branch.branchID,
                 overall: overall,
                 screening: screening,
@@ -91,8 +93,8 @@ const MovieReview = ({ navigation }) => {
                 service: service,
                 comment: value
             })
-        } catch {
-            console.log(err);
+        } catch (err){ 
+            console.log(err)
         }
     };
 
@@ -119,152 +121,151 @@ const MovieReview = ({ navigation }) => {
                         titleStyle={index == 2 ? styles.pressed : styles.unpressed}
                     />
                 </Tab>
+                <View>
+                    <Text style={styles.title}>About Us:</Text>
+                    <Text style={styles.description}>Our cinema company "Movies & Popcorn" was founded
+                        in 2021 in Byblos Jbeil then expanded quickly due to our success and opened
+                        two other branches in Beirut and Zahle. Our evergoing success, and the increasing
+                        number of movie goers is making 'MAP' climb the billboard charts and
+                        is helping us become one of the most successful cinemas in Lebanon.</Text>
+                    <Divider orientation="horizontal" style={styles.divider} />
+                    <Text style={styles.title}>Phone Number:</Text>
+                    <Text style={styles.description}>0{branch.phoneNumber}</Text>
+                    <Divider orientation="horizontal" style={styles.divider} />
+                    <Text style={styles.title}>Staff:</Text>
+                    <ScrollView style={styles.crewListContainer}>
+                        <Text style={styles.description}>{empl()}</Text>
+                    </ScrollView>
+                </View>
 
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <ScrollView
-                        showsVerticalScrollIndicator={false}
-                        style={styles.container}
-                    >
-                        <View>
-                            <Text style={styles.title}>About Us:</Text>
-                            <Text style={styles.description}>Our cinema company "Movies & Popcorn" was founded
-                                in 2021 in Byblos Jbeil then expanded quickly due to our success and opened
-                                two other branches in Beirut and Zahle. Our evergoing success, and the increasing
-                                number of movie goers is making 'MAP' climb the billboard charts and
-                                is helping us become one of the most successful cinemas in Lebanon.</Text>
-                            <Text style={styles.title}>Phone Number:</Text>
-                            <Text style={styles.description}>0{branch.phoneNumber}</Text>
-                            <Text style={styles.title}>Staff:</Text>
-                            <Text style={styles.description}>{empl()}</Text>
-                        </View>
-
-                        <View style={{
+                    <ScrollView showsVerticalScrollIndicator={false}
+                        style={{
                             backgroundColor: "#1E1F21",
                             borderRadius: 30,
                             marginTop: 5,
                             flex: 2,
                         }}>
 
-                            <AirbnbRating
-                                count={10}
-                                reviewColor="#cfcfcf"
-                                reviews={[
-                                    "Overall Experience: 1/10",
-                                    "Overall Experience: 2/10",
-                                    "Overall Experience: 3/10",
-                                    "Overall Experience: 4/10",
-                                    "Overall Experience: 5/10",
-                                    "Overall Experience: 6/10",
-                                    "Overall Experience: 7/10",
-                                    "Overall Experience: 8/10",
-                                    "Overall Experience: 9/10",
-                                    "Overall Experience: 10/10",
-                                ]}
-                                defaultRating={5}
-                                onFinishRating={overallexp}
-                                size={20}
-                            />
+                        <AirbnbRating
+                            count={10}
+                            reviewColor="#cfcfcf"
+                            reviews={[
+                                "Overall Experience: 1/10",
+                                "Overall Experience: 2/10",
+                                "Overall Experience: 3/10",
+                                "Overall Experience: 4/10",
+                                "Overall Experience: 5/10",
+                                "Overall Experience: 6/10",
+                                "Overall Experience: 7/10",
+                                "Overall Experience: 8/10",
+                                "Overall Experience: 9/10",
+                                "Overall Experience: 10/10",
+                            ]}
+                            defaultRating={5}
+                            onFinishRating={overallexp}
+                            size={20}
+                        />
 
-                            <Divider orientation="horizontal" style={styles.divider} />
+                        <Divider orientation="horizontal" style={styles.divider} />
 
-                            <AirbnbRating
-                                count={10}
-                                reviewColor="#cfcfcf"
-                                reviews={[
-                                    "Screening: 1/10",
-                                    "Screening: 2/10",
-                                    "Screening: 3/10",
-                                    "Screening: 4/10",
-                                    "Screening: 5/10",
-                                    "Screening: 6/10",
-                                    "Screening: 7/10",
-                                    "Screening: 8/10",
-                                    "Screening: 9/10",
-                                    "Screening: 10/10",
-                                ]}
-                                defaultRating={5}
-                                onFinishRating={SetScreening}
-                                size={20}
-                            />
+                        <AirbnbRating
+                            count={10}
+                            reviewColor="#cfcfcf"
+                            reviews={[
+                                "Screening: 1/10",
+                                "Screening: 2/10",
+                                "Screening: 3/10",
+                                "Screening: 4/10",
+                                "Screening: 5/10",
+                                "Screening: 6/10",
+                                "Screening: 7/10",
+                                "Screening: 8/10",
+                                "Screening: 9/10",
+                                "Screening: 10/10",
+                            ]}
+                            defaultRating={5}
+                            onFinishRating={SetScreening}
+                            size={20}
+                        />
 
-                            <Divider orientation="horizontal" style={styles.divider} />
+                        <Divider orientation="horizontal" style={styles.divider} />
 
-                            <AirbnbRating
-                                count={10}
-                                reviewColor="#cfcfcf"
-                                reviews={[
-                                    "Food: 1/10",
-                                    "Food: 2/10",
-                                    "Food: 3/10",
-                                    "Food: 4/10",
-                                    "Food: 5/10",
-                                    "Food: 6/10",
-                                    "Food: 7/10",
-                                    "Food: 8/10",
-                                    "Food: 9/10",
-                                    "Food: 10/10",
-                                ]}
-                                defaultRating={5}
-                                onFinishRating={setFood}
-                                size={20}
-                            />
+                        <AirbnbRating
+                            count={10}
+                            reviewColor="#cfcfcf"
+                            reviews={[
+                                "Food: 1/10",
+                                "Food: 2/10",
+                                "Food: 3/10",
+                                "Food: 4/10",
+                                "Food: 5/10",
+                                "Food: 6/10",
+                                "Food: 7/10",
+                                "Food: 8/10",
+                                "Food: 9/10",
+                                "Food: 10/10",
+                            ]}
+                            defaultRating={5}
+                            onFinishRating={setFood}
+                            size={20}
+                        />
 
-                            <Divider orientation="horizontal" style={styles.divider} />
+                        <Divider orientation="horizontal" style={styles.divider} />
 
-                            <AirbnbRating
-                                count={10}
-                                reviewColor="#cfcfcf"
-                                reviews={[
-                                    "Service: 1/10",
-                                    "Service: 2/10",
-                                    "Service: 3/10",
-                                    "Service: 4/10",
-                                    "Service: 5/10",
-                                    "Service: 6/10",
-                                    "Service: 7/10",
-                                    "Service: 8/10",
-                                    "Service: 9/10",
-                                    "Service: 10/10",
-                                ]}
-                                defaultRating={5}
-                                onFinishRating={setService}
-                                size={20}
-                            />
+                        <AirbnbRating
+                            count={10}
+                            reviewColor="#cfcfcf"
+                            reviews={[
+                                "Service: 1/10",
+                                "Service: 2/10",
+                                "Service: 3/10",
+                                "Service: 4/10",
+                                "Service: 5/10",
+                                "Service: 6/10",
+                                "Service: 7/10",
+                                "Service: 8/10",
+                                "Service: 9/10",
+                                "Service: 10/10",
+                            ]}
+                            defaultRating={5}
+                            onFinishRating={setService}
+                            size={20}
+                        />
 
-                            <Divider orientation="horizontal" style={styles.divider} />
+                        <Divider orientation="horizontal" style={styles.divider} />
 
-                            <Text style={{ fontSize: 25, color: '#cfcfcf', fontWeight: "bold", alignSelf: "center", marginVertical: 5 }}>General Comments</Text>
+                        <Text style={{ fontSize: 25, color: '#cfcfcf', fontWeight: "bold", alignSelf: "center", marginVertical: 5 }}>General Comments</Text>
 
-                            <TextInput
-                                editable
-                                maxLength={150}
-                                multiline
-                                numberOfLines={4}
-                                onChangeText={(text) => onChangeText(text)}
-                                value={value}
-                                placeholder={"Insert Comment Here..."}
-                                style={{ padding: 10 }}
-                                backgroundColor="white"
-                                margin={10}
-                                borderRadius={10}
-                                height={150}
-                            />
-                            <Button
-                                title={'Add Your Review'}
-                                buttonStyle={styles.button}
-                                ViewComponent={LinearGradient}
-                                linearGradientProps={{
-                                    colors: ["#42f5ef", "#429cf5"],
-                                    start: { x: 0, y: 0.5 },
-                                    end: { x: 1, y: 0.5 },
-                                }}
+                        <TextInput
+                            editable
+                            maxLength={150}
+                            multiline
+                            numberOfLines={4}
+                            onChangeText={(text) => onChangeText(text)}
+                            value={value}
+                            placeholder={"Insert Comment Here..."}
+                            style={{ padding: 10 }}
+                            backgroundColor="white"
+                            margin={10}
+                            borderRadius={10}
+                            height={150}
+                        />
+                        <Button
+                            title={'Add Your Review'}
+                            buttonStyle={styles.button}
+                            ViewComponent={LinearGradient}
+                            linearGradientProps={{
+                                colors: ["#42f5ef", "#429cf5"],
+                                start: { x: 0, y: 0.5 },
+                                end: { x: 1, y: 0.5 },
+                            }}
 
-                                onPress={() => {
-                                    addRev()
-                                    navigation.navigate("Home");
-                                }}
-                            />
-                        </View>
+                            onPress={() => {
+                                addRev()
+                                navigation.navigate("Home");
+                            }}
+                        />
                     </ScrollView>
                 </TouchableWithoutFeedback>
             </SafeAreaView>
@@ -283,12 +284,13 @@ const styles = StyleSheet.create({
         color: '#cfcfcf',
         fontSize: 18,
         fontWeight: "bold",
-        marginTop: 15
+        marginTop: 15,
+        marginLeft: 10
     },
     description: {
         color: '#cfcfcf',
         fontSize: 15,
-        marginHorizontal: 15,
+        marginHorizontal: 25,
         textAlign: "justify",
     },
     button: {
@@ -318,10 +320,15 @@ const styles = StyleSheet.create({
 
     },
     divider: {
-        marginHorizontal: 5,
+        marginRight: 25,
+        marginLeft: 10,
         marginVertical: 5,
         borderWidth: 0.1,
     },
+    crewListContainer: {
+        flexDirection: "row",
+        marginVertical: 5,
+    },
 });
 
-export default MovieReview;
+export default ExperienceReview;

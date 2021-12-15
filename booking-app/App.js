@@ -21,8 +21,8 @@ const navigator = createSwitchNavigator(
       Home: HomeScreen,
       Movie: MovieScreen,
       Review: MovieReview,
-      Experience: ExperienceReview,
-      Book: BookingScreen,
+      About: ExperienceReview,
+      Booking: BookingScreen,
     }),
   },
   {
@@ -61,6 +61,16 @@ MovieReview.navigationOptions = () => {
   };
 };
 ExperienceReview.navigationOptions = () => {
+  return {
+    headerStyle: {
+      backgroundColor: "#303337",
+    },
+    headerTitleStyle: {
+      color: "#cfcfcf",
+    },
+  };
+};
+BookingScreen.navigationOptions = () => {
   return {
     headerStyle: {
       backgroundColor: "#303337",
