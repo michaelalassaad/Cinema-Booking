@@ -11,16 +11,16 @@ const HomeScreen = () => {
 
   useEffect(async () => {
     if (index == 0) {
-      try { 
-        const res = await axios.get("http://192.168.0.100:3000/now"); 
+      try {  
+        const res = await axios.get("http://172.20.10.2:3000/now");  
         setTerm("");
         setMovies(res.data);
       } catch (err) {
         console.log(err);
       }
     } else {
-      try { 
-        const res = await axios.get("http://192.168.0.100:3000/all"); 
+      try {  
+        const res = await axios.get("http://172.20.10.2:3000/all");  
         setTerm("");
         setMovies(res.data);
       } catch (err) {
@@ -30,8 +30,8 @@ const HomeScreen = () => {
   }, [index]);
 
   const search = async (searchTerm) => {
-    try { 
-      const res = await axios.get("http://192.168.0.100:3000/search", { 
+    try {  
+      const res = await axios.get("http://172.20.10.2:3000/search", {  
         params: {
           term: searchTerm,
           filter: index,

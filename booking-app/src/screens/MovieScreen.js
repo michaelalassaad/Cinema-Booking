@@ -34,8 +34,8 @@ const MovieScreen = ({ navigation }) => {
   };
 
   const getReviews = async (id) => {
-    try {
-      const res3 = await axios.get("http://192.168.0.100:3000/review/", {
+    try { 
+      const res3 = await axios.get("http://172.20.10.2:3000/review/", { 
         params: { movID: id },
       });
       setReview(res3.data);
@@ -69,24 +69,24 @@ const MovieScreen = ({ navigation }) => {
 
   useEffect(async () => {
     const id = getID();
-    try {
-      const res = await axios.get("http://192.168.0.100:3000/movie/", {
+    try { 
+      const res = await axios.get("http://172.20.10.2:3000/movie/", {
         params: { movID: id },
       });
       setMovie(res.data);
-      const res1 = await axios.get("http://192.168.0.100:3000/act/", {
+      const res1 = await axios.get("http://172.20.10.2:3000/act/", {
         params: { movID: id },
       });
       setActor(res1.data);
-      const res2 = await axios.get("http://192.168.0.100:3000/dir/", {
+      const res2 = await axios.get("http://172.20.10.2:3000/dir/", {
         params: { movID: id },
       });
       setDirec(res2.data);
-      const res3 = await axios.get("http://192.168.0.100:3000/review/", {
+      const res3 = await axios.get("http://172.20.10.2:3000/review/", {
         params: { movID: id },
       });
       setReview(res3.data);
-      const res4 = await axios.get("http://192.168.0.100:3000/food");
+      const res4 = await axios.get("http://172.20.10.2:3000/food"); 
       setList(res4.data);
 
       getReviews(id);

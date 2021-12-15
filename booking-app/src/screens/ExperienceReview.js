@@ -36,14 +36,14 @@ const ExperienceReview = ({ navigation }) => {
             bra = ("Zahle")
 
         try {
-
-            const res = await axios.get("http://192.168.0.100:3000/branch/", {
+ 
+            const res = await axios.get("http://172.20.10.2:3000/branch/", { 
                 params: { branch: bra }
             });
             setBranch(res.data);
             bID = res.data
-
-            const res2 = await axios.get("http://192.168.0.100:3000/staff/", {
+ 
+            const res2 = await axios.get("http://172.20.10.2:3000/staff/", { 
                 params: { branch: bID.branchID }
             });
             setEmpl(res2.data);
@@ -83,8 +83,8 @@ const ExperienceReview = ({ navigation }) => {
 
     const addRev = async () => {
         try {
-            console.log("Cust", custID);
-            const res = await axios.post("http://192.168.0.100:3000/add_experience/", {
+            console.log("Cust", custID); 
+            const res = await axios.post("http://172.20.10.2:3000/add_experience/", { 
                 cID: custID,
                 bID: branch.branchID,
                 overall: overall,
