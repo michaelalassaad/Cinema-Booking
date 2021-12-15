@@ -34,8 +34,8 @@ const MovieScreen = ({ navigation }) => {
   };
 
   const getReviews = async (id) => {
-    try {
-      const res3 = await axios.get("http://172.20.10.2:3000/review/", {
+    try { 
+      const res3 = await axios.get("http://172.20.10.2:3000/review/", { 
         params: { movID: id },
       });
       setReview(res3.data);
@@ -69,7 +69,7 @@ const MovieScreen = ({ navigation }) => {
 
   useEffect(async () => {
     const id = getID();
-    try {
+    try { 
       const res = await axios.get("http://172.20.10.2:3000/movie/", {
         params: { movID: id },
       });
@@ -86,7 +86,7 @@ const MovieScreen = ({ navigation }) => {
         params: { movID: id },
       });
       setReview(res3.data);
-      const res4 = await axios.get("http://172.20.10.2:3000/food");
+      const res4 = await axios.get("http://172.20.10.2:3000/food"); 
       setList(res4.data);
 
       getReviews(id);
